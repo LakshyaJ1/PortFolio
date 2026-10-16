@@ -228,7 +228,7 @@ function Guide() {
       const avoid: Box[] = near ? [inflate({ left: pointer.x, top: pointer.y, right: pointer.x, bottom: pointer.y }, 56)] : [];
       // the fixed nav hides while scrolling down and slides back later, so it may be missing from
       // the cached obstacles: keep its band clear on the site no matter what state it's in
-      if (useApp.getState().phase === "site") avoid.push({ left: 0, top: 0, right: vw, bottom: NAV_BAND });
+      const reserved: Box[] = useApp.getState().phase === "site" ? [{ left: 0, top: 0, right: vw, bottom: NAV_BAND }] : [];
       return {
         vw,
         vh,
@@ -237,6 +237,7 @@ function Guide() {
         obstacles: obstaclesIn(candidates(), { left: 0, top: 0, right: vw, bottom: vh }),
         narrow: narrowRef.current,
         avoid,
+        reserved,
         from: placed ? mover.get() : undefined,
       };
     };
@@ -410,11 +411,15 @@ function Guide() {
       if (a.el && spot0 && r0) {
         const el = a.el;
         const rel = { x: spot.at.x - r0.left, y: spot.at.y - r0.top };
+        const bubbleTop = spot.bubble && !spot.dock ? Math.min(0, spot.bubble.y) : 0;
         travel(
           () => {
             if (!el.isConnected) return null;
             const r = el.getBoundingClientRect();
-            return visibleEnough(r) ? clampPt({ x: r.left + rel.x, y: r.top + rel.y }) : null;
+            const at = { x: r.left + rel.x, y: r.top + rel.y };
+            // following the target up under the fixed nav: let go rather than cover it
+            if (useApp.getState().phase === "site" && at.y + bubbleTop < NAV_BAND) return null;
+            return visibleEnough(r) ? clampPt(at) : null;
           },
           { follow: true, onArrive: arrive, onLost: letGo },
         );

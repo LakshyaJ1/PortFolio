@@ -46,6 +46,8 @@ export type Scene = {
   narrow: boolean;
   /** boxes she must not sit on (the pointer's neighbourhood: the visitor may be about to click) */
   avoid?: Box[];
+  /** screen areas neither she nor her bubble may ever cover, in any mode (the fixed nav) */
+  reserved?: Box[];
   /** where she is now, to prefer short hops */
   from?: Pt;
 };
@@ -84,6 +86,7 @@ function cost(b: Box, scene: Scene, ownMedia?: Box) {
 function hitsControl(b: Box, scene: Scene) {
   for (const o of scene.obstacles) if (o.w >= CONTROL && overlaps(b, o.box)) return true;
   for (const v of scene.avoid ?? []) if (overlaps(b, v)) return true;
+  for (const v of scene.reserved ?? []) if (overlaps(b, v)) return true;
   return false;
 }
 
@@ -149,6 +152,7 @@ function bestBubble(
   for (const o of bubbleOptions(at, scene, prefer)) {
     if (!inside(o.bb, scene.vw, scene.vh)) continue;
     if ((forbid && overlaps(o.bb, forbid)) || overlaps(o.bb, me)) continue;
+    if (scene.reserved?.some((r) => overlaps(o.bb, r))) continue; // even a last-resort line never covers the nav
     if (mode !== "soft" && hitsControl(o.bb, scene)) continue;
     const raw = cost(o.bb, scene, ownMedia);
     if (mode === "strict" && raw > 0) continue;
