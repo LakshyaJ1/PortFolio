@@ -1,0 +1,482 @@
+.fill {
+  position: absolute;
+  inset: 0;
+}
+
+.fill > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.svg :is(line, path, rect, circle) {
+  vector-effect: non-scaling-stroke;
+}
+
+/* ─── controls ─── */
+.controlRow,
+.sliderRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3) var(--s-4);
+  width: 100%;
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 36px;
+  padding: 0 var(--s-3) 0 var(--s-1);
+  border-radius: var(--r-1);
+  font-size: var(--t-small);
+  font-weight: 600;
+  font-stretch: 100%;
+  color: var(--ink);
+}
+
+.switchTrack {
+  position: relative;
+  width: 38px;
+  height: 20px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--z3);
+  transition:
+    background-color var(--dur-2) var(--ease),
+    border-color var(--dur-2) var(--ease);
+}
+
+.switchThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--z8);
+  transition:
+    transform var(--dur-3) var(--ease),
+    background-color var(--dur-2) var(--ease);
+}
+
+.switch[aria-checked="true"] .switchTrack {
+  background: var(--fix);
+  border-color: var(--fix);
+}
+
+.switch[aria-checked="true"] .switchThumb {
+  transform: translateX(18px);
+  background: var(--fix-ink);
+}
+
+.switch:hover .switchTrack {
+  border-color: var(--fix);
+}
+
+.mode {
+  font-size: 0.875rem;
+  color: var(--ink-3);
+}
+
+.sliderLabel {
+  font-size: 0.75rem;
+  font-stretch: 80%;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* range input themed from the ramp: hairline track, fix thumb */
+.slider {
+  flex: 1 1 180px;
+  min-width: 140px;
+  height: 28px;
+  margin: 0;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--z5);
+  border-radius: 1px;
+}
+
+.slider::-moz-range-track {
+  height: 2px;
+  background: var(--z5);
+  border-radius: 1px;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -8px;
+  border-radius: 50%;
+  background: var(--fix);
+  border: 2px solid var(--ground);
+  box-shadow: var(--shadow-1);
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--fix);
+  border: 2px solid var(--ground);
+}
+
+.slider:focus-visible {
+  outline-offset: 2px;
+}
+
+.sliderOut {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.note {
+  flex-basis: 100%;
+  font-size: var(--t-small);
+  color: var(--ink-3);
+}
+
+.note[data-on] {
+  color: var(--fix-hi);
+}
+
+/* ─── SVG vocabulary ─── */
+.dia rect,
+.dia path {
+  fill: var(--z2);
+  stroke: var(--z7);
+  stroke-width: 1;
+}
+
+.dia path {
+  fill: none;
+}
+
+.dia .diaBlock {
+  fill: var(--z3);
+  stroke: var(--z8);
+}
+
+.tLabel {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  font-stretch: 78%;
+  letter-spacing: 0.06em;
+  fill: var(--ink);
+}
+
+.tMono,
+.tMonoInk {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  fill: var(--ink-3);
+}
+
+.tMonoInk {
+  fill: var(--ink);
+}
+
+/* labels on the demo drawings are names, not data: Archivo condensed caps */
+.tCaps,
+.tCapsInk {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  font-stretch: 78%;
+  letter-spacing: 0.1em;
+  fill: var(--ink-3);
+}
+
+.tCapsInk {
+  fill: var(--ink);
+}
+
+.tSmall {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-stretch: 82%;
+  fill: var(--ink-3);
+}
+
+.tResult {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+
+.fuse {
+  fill: var(--z5);
+  stroke: var(--z8);
+}
+
+.weightLink {
+  fill: none;
+  stroke: var(--z6);
+  stroke-linecap: round;
+  transition: stroke var(--dur-2) var(--ease);
+}
+
+.weightLink[data-heavy] {
+  stroke: var(--z9);
+}
+
+.axis {
+  stroke: var(--z6);
+  stroke-width: 1;
+}
+
+.baseline {
+  stroke: var(--z7);
+  stroke-width: 1;
+  stroke-dasharray: 6 4;
+}
+
+.dimLine {
+  fill: none;
+  stroke: var(--z9);
+  stroke-width: 1;
+}
+
+.curve {
+  fill: none;
+  stroke: var(--z9);
+  stroke-width: 1.5;
+}
+
+.guide {
+  stroke: var(--z6);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.cursor {
+  fill: var(--z10);
+  stroke: var(--ground);
+  stroke-width: 1.5;
+}
+
+.result path,
+.result circle {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.5;
+}
+
+.resultRing {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.result[data-on] .resultRing {
+  fill: var(--fix);
+  animation: ring 1.4s var(--ease) infinite;
+}
+
+@keyframes ring {
+  0% {
+    stroke-opacity: 1;
+  }
+  100% {
+    stroke-opacity: 0.2;
+  }
+}
+
+/* ─── TokenForge launch ─── */
+.lockRoot {
+  position: relative;
+  display: grid;
+  gap: var(--s-4);
+}
+
+.mintBtn {
+  height: 38px;
+  padding-inline: var(--s-4);
+  border-radius: var(--r-1);
+  background: var(--fix);
+  color: var(--fix-ink);
+  font-size: 0.875rem;
+  font-weight: 650;
+  font-stretch: 108%;
+  box-shadow: var(--shadow-1);
+  transition:
+    background-color var(--dur-2) var(--ease),
+    transform var(--dur-2) var(--ease);
+}
+
+.mintBtn:hover:not(:disabled) {
+  background: var(--z10);
+}
+
+.mintBtn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.mintBtn:disabled {
+  background: var(--z4);
+  color: var(--ink-3);
+  box-shadow: none;
+  cursor: progress;
+}
+
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1) var(--s-4);
+  font-size: var(--t-small);
+  color: var(--ink-3);
+}
+
+.steps li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--dur-2) var(--ease);
+}
+
+.steps li[data-done] {
+  color: var(--ink);
+}
+
+.steps li[data-now] {
+  color: var(--fix-hi);
+}
+
+.stepNo {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.625rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.codeBar {
+  fill: var(--z6);
+}
+
+.link,
+.thin {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1;
+}
+
+.pad {
+  fill: var(--z3);
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+.exhaust {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.2;
+  opacity: 0;
+}
+
+.token {
+  fill: var(--z10);
+}
+
+.pool {
+  fill: var(--z2);
+  stroke: var(--z8);
+  stroke-width: 1.2;
+}
+
+.poolLevel {
+  fill: none;
+  stroke: var(--z5);
+}
+
+.lock rect,
+.lock path,
+.lock circle {
+  fill: var(--z3);
+  stroke: var(--z10);
+  stroke-width: 1.2;
+}
+
+.lock path {
+  fill: none;
+}
+
+.barTrack {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.barFill {
+  fill: var(--z5);
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+/* the geocache: a coin that rolled off the end of the supply bar */
+.stray {
+  position: absolute;
+  z-index: 3;
+  right: 1.5%;
+  top: 72%;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--z6);
+  transition:
+    color var(--dur-2) var(--ease),
+    transform var(--dur-3) var(--ease);
+}
+
+.stray svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  transform: rotate(-12deg);
+}
+
+.strayCore {
+  fill: currentColor;
+}
+
+.stray:hover,
+.stray:focus-visible {
+  color: var(--fix-hi);
+  transform: rotate(40deg);
+}
+
+.fact {
+  max-width: 54ch;
+  font-size: var(--t-small);
+  color: var(--ink-2);
+}

@@ -1,0 +1,548 @@
+/* The greeting: a night sheet with a dot-plotted world, a GNSS fix slewing between hellos.
+   Map scale is one CSS length, --s (px per degree), equal to the SVG `meet` scale of the
+   map window (170° × 70°, centred on 65°E 31°N), so HTML overlays sit exactly on the map. */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-intro);
+  overflow: hidden;
+  background: var(--z1); /* the ground the panel lifts off: the intro stage's own ground */
+  contain: layout paint;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.panel {
+  --s: min(100vw / 170, 100vh / 70);
+  --cy: 50%; /* where 31°N (the map window's centre line) sits */
+  position: absolute;
+  inset: 0;
+  background: var(--z0);
+}
+
+.clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.world {
+  position: absolute;
+  inset: 0;
+}
+
+/* narrow screens: a moving map, twice the viewport wide, panned to keep the fix in view */
+@media (max-width: 720px) {
+  .panel {
+    --s: min(200vw / 170, 100vh / 70);
+    --cy: calc(36px + 59 * var(--s)); /* the pole sits just under the top labels */
+  }
+
+  .world {
+    right: auto;
+    width: 200vw;
+    transform: translate(calc(-50vw - (var(--pc) - 65) * var(--s)), calc(var(--cy) - 50%));
+  }
+
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  overflow: visible;
+}
+
+.grat,
+.gratIndex,
+.circles,
+.trail,
+.stations,
+.live {
+  fill: none;
+  stroke-width: 1;
+}
+
+.grat {
+  stroke: var(--z3);
+}
+
+.gratIndex {
+  stroke: var(--z4);
+}
+
+.circles {
+  stroke: var(--z4);
+  stroke-dasharray: 2 6;
+}
+
+.dot {
+  fill: var(--z5);
+}
+
+.trail {
+  stroke: var(--z6);
+}
+
+.stations {
+  stroke: var(--z7);
+  stroke-width: 1.25;
+}
+
+.live {
+  stroke: var(--fix);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+/* graticule labels along the sheet edges */
+.mer,
+.par {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--mute);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mer {
+  top: var(--s-4);
+  left: calc(50% + (var(--l) - 65) * var(--s));
+  transform: translateX(5px);
+}
+
+.par {
+  left: var(--s-4);
+  top: calc(var(--cy) + (31 - var(--l)) * var(--s));
+  transform: translateY(calc(-100% - 5px));
+}
+
+/* the fix */
+.marker {
+  position: absolute;
+  left: calc(50% + (var(--lng) - 65) * var(--s));
+  top: calc(50% + (31 - var(--lat)) * var(--s));
+  width: 0;
+  height: 0;
+}
+
+.pip,
+.ping {
+  position: absolute;
+  left: -7px;
+  top: -7px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+.pip {
+  border: 1.5px solid var(--fix);
+}
+
+.pip::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--fix);
+}
+
+.ping {
+  border: 1px solid var(--fix);
+  visibility: hidden;
+  opacity: 0;
+}
+
+.lock {
+  position: absolute;
+  left: -40px;
+  top: -40px;
+  width: 80px;
+  height: 80px;
+  max-width: none;
+  overflow: visible;
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.5;
+  stroke-linecap: square;
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* plumb line: from the fix down to the readout */
+.overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.plumb {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.plumb line {
+  stroke: var(--z6);
+  stroke-width: 1;
+}
+
+.plumb circle {
+  fill: var(--z0);
+  stroke: var(--z7);
+  stroke-width: 1;
+}
+
+/* the hello and its readout */
+.label {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(64px, 13vh, 132px);
+  display: grid;
+  justify-items: center;
+  gap: var(--s-3);
+  width: min(100% - 32px, 760px);
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.words {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: calc(var(--t-display) * 1.34);
+}
+
+.word {
+  grid-area: 1 / 1;
+  font-size: var(--t-display);
+  font-weight: 600;
+  font-stretch: 110%;
+  line-height: 1.34;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.word[data-on] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.word:lang(hi) {
+  font-family: var(--font-deva);
+  font-stretch: 100%;
+  letter-spacing: 0;
+}
+
+.word:lang(ja) {
+  font-family: "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
+  font-size: calc(var(--t-display) * 0.86);
+  letter-spacing: 0.02em;
+}
+
+.word:lang(ko) {
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Noto Sans CJK KR", sans-serif;
+  font-size: calc(var(--t-display) * 0.86);
+  letter-spacing: 0;
+}
+
+.word:lang(zh) {
+  font-family: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", sans-serif;
+  font-size: calc(var(--t-display) * 0.86);
+  letter-spacing: 0.04em;
+}
+
+.word:lang(ar) {
+  font-family: "Geeza Pro", "Segoe UI", "Noto Sans Arabic", Tahoma, sans-serif;
+  font-size: calc(var(--t-display) * 0.92);
+  letter-spacing: 0;
+}
+
+.readout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  column-gap: var(--s-5);
+  row-gap: var(--s-2);
+  line-height: 1.2;
+}
+
+.place,
+.status {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-stretch: 82%;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.place {
+  color: var(--ink-3);
+}
+
+.coords {
+  width: 22ch;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.meta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  color: var(--mute);
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mute);
+}
+
+.status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  animation: acquire 0.5s steps(2, jump-none) infinite;
+}
+
+.status[data-state="fix"] {
+  color: var(--fix);
+}
+
+.status[data-state="fix"]::before {
+  animation: none;
+}
+
+@keyframes acquire {
+  to {
+    opacity: 0.2;
+  }
+}
+
+/* sheet collar */
+.collar {
+  position: absolute;
+  left: var(--s-4);
+  right: var(--s-4);
+  bottom: var(--s-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--s-4);
+  color: var(--mute);
+}
+
+.note {
+  display: grid;
+  gap: 4px;
+  font-family: var(--font-display);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  font-stretch: 85%;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.hintTouch {
+  display: none;
+}
+
+@media (hover: none) {
+  .hintFine {
+    display: none;
+  }
+
+  .hintTouch {
+    display: inline;
+  }
+}
+
+.scale {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+}
+
+.bar {
+  width: calc(10.48 * var(--s)); /* 1000 km of longitude at 31°N */
+  height: 5px;
+  border: 1px solid var(--z6);
+  background: linear-gradient(90deg, var(--z6) 0 50%, transparent 50%);
+}
+
+.scaleText {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* the lifting edge */
+.skirt {
+  position: absolute;
+  left: 0;
+  top: calc(100% - 1px);
+  width: 100%;
+  height: 16vh;
+  max-width: none;
+  overflow: visible;
+}
+
+.skirtFill {
+  fill: var(--z0);
+}
+
+.skirtEdge,
+.skirtInner1,
+.skirtInner2 {
+  fill: none;
+}
+
+.skirtEdge {
+  stroke: var(--contour-index);
+  stroke-width: 1.25;
+}
+
+.skirtInner1 {
+  stroke: var(--contour);
+  stroke-width: 1;
+}
+
+.skirtInner2 {
+  stroke: var(--z4);
+  stroke-width: 1;
+}
+
+@media (max-width: 720px) {
+  /* labels ride on the shifted map, so undo the shift to keep them on the sheet edge */
+  .mer {
+    top: calc(var(--s-4) - var(--cy) + 50%);
+  }
+
+  .label {
+    bottom: clamp(72px, 15vh, 140px);
+  }
+
+  .readout {
+    column-gap: var(--s-4);
+  }
+}
+
+/* the label art (the hello and its readout) is the greeting's one image */
+.art {
+  display: grid;
+  justify-items: center;
+  gap: var(--s-3);
+  width: 100%;
+}
+
+/* ─── the gate: "Tap anywhere to meet Lakshya" ─── */
+.gate {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + clamp(14px, 3.2vh, 30px));
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.gateBtn {
+  padding: 4px 14px;
+  border-radius: var(--r-1);
+  color: var(--ink);
+  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.375rem);
+  font-weight: 600;
+  font-stretch: 108%;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  animation: gate-breathe 2.6s var(--ease-io) infinite alternate;
+}
+
+@keyframes gate-breathe {
+  to {
+    opacity: 0.62;
+  }
+}
+
+.gateHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-stretch: 82%;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--fix);
+}
+
+.gateHint .hintFine {
+  color: var(--mute);
+}
+
+.gateHint kbd {
+  font-size: 0.6875rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-3);
+}
+
+/* the wait: a hairline that runs out, then the stage starts without sound */
+.gateTrack {
+  width: 96px;
+  height: 1px;
+  margin-top: 4px;
+  overflow: hidden;
+  background: var(--z4);
+}
+
+.gateTimer {
+  display: block;
+  height: 100%;
+  background: var(--z7);
+  transform-origin: 0 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gateTrack {
+    display: none;
+  }
+}

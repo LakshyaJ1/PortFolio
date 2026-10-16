@@ -1,0 +1,490 @@
+.fill {
+  position: absolute;
+  inset: 0;
+}
+
+.fill > canvas,
+.fill > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── agent graph (SVG) ─── */
+.edge {
+  stroke: var(--z6);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.arrowHead {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1.2;
+}
+
+.node rect {
+  fill: var(--z3);
+  stroke: var(--z6);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transition:
+    stroke var(--dur-2) var(--ease),
+    fill var(--dur-2) var(--ease);
+}
+
+.node[data-hot] rect {
+  stroke: var(--fix);
+  fill: var(--z4);
+}
+
+.nodeLabel {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  font-stretch: 78%;
+  letter-spacing: 0.06em;
+  fill: var(--ink);
+}
+
+.nodeSub {
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-stretch: 78%;
+  fill: var(--ink-3);
+}
+
+.boundary,
+.rbac {
+  fill: none;
+  stroke: var(--z6);
+  stroke-width: 1;
+  stroke-dasharray: 5 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.rbac {
+  stroke: var(--z7);
+  stroke-dasharray: 2 3;
+}
+
+.boundaryLabel,
+.groupLabel {
+  font-family: var(--font-display);
+  font-size: 9.5px;
+  font-weight: 600;
+  font-stretch: 78%;
+  letter-spacing: 0.12em;
+  fill: var(--ink-3);
+}
+
+.groupLabel {
+  fill: var(--mute);
+}
+
+.gateRing {
+  fill: var(--z3);
+  stroke: var(--z7);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  transition: stroke var(--dur-2) var(--ease);
+}
+
+.gatePulse {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.gate[data-waiting] .gateRing {
+  stroke: var(--fix);
+}
+
+.gate[data-flash] .gateRing {
+  stroke: var(--ok);
+}
+
+.gate[data-waiting] .gatePulse {
+  animation: gatePulse 1.6s var(--ease) infinite;
+}
+
+@keyframes gatePulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.75);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gate[data-waiting] .gatePulse {
+    animation: none;
+    opacity: 0.6;
+    transform: scale(1.3);
+  }
+}
+
+.audit rect {
+  fill: var(--z1);
+  stroke: var(--z5);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.logTime {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  fill: var(--ink-3);
+}
+
+.logVerdict {
+  letter-spacing: 0.1em;
+  fill: var(--ink);
+}
+
+.logRow[data-verdict="APPROVED"] .logVerdict {
+  fill: var(--ok);
+}
+
+.logRow[data-verdict="BLOCKED"] .logVerdict,
+.logRow[data-verdict="REJECTED"] .logVerdict {
+  fill: var(--fix-hi);
+}
+
+.logDetail {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-stretch: 82%;
+  fill: var(--ink-2);
+}
+
+.packet rect {
+  fill: var(--fix);
+  stroke: var(--fix);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.packet[data-mode="fade"] rect {
+  fill: var(--z2);
+}
+
+.packet[data-mode="wait"] rect {
+  fill: var(--fix-hi);
+}
+
+/* the real Approve button, pinned over the gate */
+.approve {
+  position: absolute;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  height: 30px;
+  padding-inline: var(--s-4);
+  border-radius: var(--r-1);
+  background: var(--fix);
+  color: var(--fix-ink);
+  font-size: 0.8125rem;
+  font-weight: 650;
+  font-stretch: 108%;
+  letter-spacing: 0.01em;
+  box-shadow: var(--shadow-1);
+  transition:
+    background-color var(--dur-2) var(--ease),
+    color var(--dur-2) var(--ease),
+    transform var(--dur-2) var(--ease);
+}
+
+.approve:hover:not(:disabled) {
+  background: var(--z10);
+}
+
+.approve:active:not(:disabled) {
+  transform: translate(-50%, calc(-50% + 1px));
+}
+
+.approve:disabled {
+  background: var(--z3);
+  color: var(--ink-3);
+  box-shadow: none;
+  border: 1px solid var(--line-strong);
+  cursor: default;
+}
+
+.pendingRow,
+.queryRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-4);
+  width: 100%;
+  font-size: var(--t-small);
+  color: var(--ink-2);
+}
+
+.queryRow {
+  justify-content: flex-start;
+  gap: var(--s-1) var(--s-2);
+}
+
+.pendingText {
+  min-width: 0;
+}
+
+.pendingKey {
+  font-size: 0.6875rem;
+  font-stretch: 80%;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.formula {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink);
+  margin-right: var(--s-2);
+}
+
+.queryText {
+  color: var(--ink);
+  margin-right: var(--s-2);
+}
+
+.quietBtn {
+  min-height: 28px;
+  padding: 0 var(--s-1);
+  color: var(--ink-3);
+  font-size: var(--t-small);
+  text-decoration: underline;
+  text-decoration-color: var(--z6);
+  text-underline-offset: 0.3em;
+  transition: color var(--dur-2) var(--ease);
+}
+
+.quietBtn:hover:not(:disabled) {
+  color: var(--ink);
+  text-decoration-color: var(--fix);
+}
+
+.quietBtn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ─── retrieval ─── */
+.split {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 60fr) minmax(0, 40fr);
+}
+
+.splitCanvas {
+  position: relative;
+}
+
+.splitCanvas canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.rank {
+  position: relative;
+  border-left: 1px solid var(--line-strong);
+  background: var(--z2);
+  padding: 40px var(--s-3) var(--s-3);
+  overflow: hidden;
+}
+
+.rankHead {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-2);
+  margin-bottom: var(--s-2);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-stretch: 78%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.rankList {
+  --row: 42px;
+  position: relative;
+  height: calc(var(--row) * 5);
+  transition: opacity var(--dur-3) var(--ease);
+}
+
+.rankList[data-stage="0"] {
+  opacity: 0;
+}
+
+.rankItem {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: var(--row);
+  display: grid;
+  align-content: center;
+  gap: 1px;
+  padding-left: var(--s-2);
+  border-top: 1px solid var(--line);
+  transform: translateY(calc(var(--rank) * var(--row)));
+  transition:
+    transform var(--dur-4) var(--ease),
+    background-color var(--dur-3) var(--ease);
+}
+
+.rankItem[data-first] {
+  background: var(--z3);
+  box-shadow: inset 1px 0 0 var(--fix);
+}
+
+.rankId {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.rankNo {
+  color: var(--ink-3);
+}
+
+.rankItem[data-first] .rankNo {
+  color: var(--fix-hi);
+}
+
+.rankScore {
+  margin-left: auto;
+  color: var(--ink-3);
+}
+
+.rankDesc {
+  font-size: 0.75rem;
+  font-stretch: 80%;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── voice chips ─── */
+.chips {
+  display: inline-flex;
+  gap: var(--s-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  height: 32px;
+  padding-inline: var(--s-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--z2);
+  transition:
+    border-color var(--dur-2) var(--ease),
+    color var(--dur-2) var(--ease);
+}
+
+.chip:hover {
+  border-color: var(--fix);
+  color: var(--fix-hi);
+}
+
+.wave {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 14px;
+}
+
+.wave i {
+  display: block;
+  width: 2px;
+  height: 5px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+.wave i:nth-child(2) {
+  height: 9px;
+}
+
+.wave i:nth-child(3) {
+  height: 12px;
+}
+
+.chip[data-listening] {
+  border-color: var(--fix);
+  color: var(--fix-hi);
+}
+
+.chip[data-listening] .wave i {
+  animation: wave 0.5s var(--ease-io) infinite alternate;
+}
+
+.chip[data-listening] .wave i:nth-child(2) {
+  animation-delay: -0.15s;
+}
+
+.chip[data-listening] .wave i:nth-child(3) {
+  animation-delay: -0.3s;
+}
+
+.chip[data-listening] .wave i:nth-child(4) {
+  animation-delay: -0.45s;
+}
+
+@keyframes wave {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1.25);
+  }
+}
+
+.heard {
+  font-size: var(--t-small);
+  color: var(--ink-3);
+}
+
+@media (max-width: 720px) {
+  .rank {
+    padding: 36px var(--s-2) var(--s-2);
+  }
+
+  .rankList {
+    --row: 31px;
+  }
+
+  .rankDesc {
+    font-size: 0.6875rem;
+  }
+
+  .rankScore {
+    display: none;
+  }
+}

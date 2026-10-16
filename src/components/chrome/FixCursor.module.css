@@ -1,0 +1,87 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-cursor);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-2) var(--ease);
+}
+
+.root[data-shown="1"] {
+  opacity: 1;
+}
+
+.field {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+/* uncertainty ellipse: drawn at unit size and scaled; the stroke stays one pixel */
+.ellipse {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  vector-effect: non-scaling-stroke;
+  transition: stroke var(--dur-2) var(--ease);
+}
+
+.axis {
+  fill: none;
+  stroke: var(--z6);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transition: stroke var(--dur-2) var(--ease), opacity var(--dur-2) var(--ease);
+}
+
+.root[data-fix="1"] .ellipse {
+  stroke: var(--fix);
+  stroke-dasharray: none;
+}
+
+.root[data-fix="1"] .axis {
+  opacity: 0;
+}
+
+/* the dead-reckoned estimate */
+.ring {
+  position: absolute;
+  left: -16px;
+  top: -16px;
+  width: 32px;
+  height: 32px;
+  will-change: transform;
+}
+
+.ring svg {
+  overflow: visible;
+}
+
+.ringCircle {
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-width: 1.25;
+  transition: stroke var(--dur-2) var(--ease);
+}
+
+.ticks {
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  transform-origin: 0 0;
+  transition:
+    stroke var(--dur-2) var(--ease),
+    transform var(--dur-3) var(--ease);
+}
+
+.root[data-fix="1"] .ringCircle,
+.root[data-fix="1"] .ticks {
+  stroke: var(--fix);
+}
+
+/* the ticks close in on the target as the fix locks: a tight reticle inside the fix circle */
+.root[data-fix="1"] .ticks {
+  transform: scale(0.72);
+}

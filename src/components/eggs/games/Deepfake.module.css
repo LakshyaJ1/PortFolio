@@ -1,0 +1,252 @@
+.stage {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  container-type: size;
+  scrollbar-color: var(--z5) var(--z1);
+  scrollbar-width: thin;
+}
+
+.layout {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--s-4);
+  min-height: 100%;
+  padding: var(--s-4);
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+  width: min(100%, 820px, calc(2 * (100cqh - 250px) + var(--s-4)));
+  min-width: min(100%, 300px);
+}
+
+.panel {
+  display: grid;
+  gap: var(--s-2);
+  min-width: 0;
+  text-align: left;
+  color: var(--ink-2);
+}
+
+.panel[aria-disabled="true"] {
+  cursor: default;
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--z0);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  overflow: hidden;
+  transition: border-color var(--dur-2) var(--ease);
+}
+
+.media canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.panel:not([aria-disabled="true"]):hover .media {
+  border-color: var(--fix);
+}
+
+.panel[data-state="fake"] .media {
+  border-color: var(--fix);
+}
+
+.panel[data-state="clean"] .media {
+  opacity: 0.72;
+}
+
+.marks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  animation: draw var(--dur-4) var(--ease) both;
+}
+
+.marks * {
+  vector-effect: non-scaling-stroke;
+}
+
+@keyframes draw {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+}
+
+.axis {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+
+.axis span {
+  position: absolute;
+  padding: 1px 4px;
+  background: color-mix(in srgb, var(--z0) 80%, transparent);
+}
+
+.axis span:first-child {
+  top: 4px;
+  left: 4px;
+}
+
+.axis span:last-child {
+  right: 4px;
+  bottom: 4px;
+}
+
+.caption {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.key {
+  padding: 0 6px;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+}
+
+.verdict {
+  margin-left: auto;
+  color: var(--ink-3);
+}
+
+.panel[data-state="fake"] .verdict {
+  color: var(--fix-hi);
+}
+
+.explain {
+  display: grid;
+  gap: var(--s-3) var(--s-5);
+  width: min(100%, 820px);
+}
+
+.explain[data-inset] {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.explainText {
+  display: grid;
+  gap: var(--s-3);
+  min-width: 0;
+}
+
+.ask {
+  text-align: center;
+  color: var(--ink-3);
+  font-size: var(--t-small);
+}
+
+.verdictLine {
+  color: var(--ink-2);
+}
+
+.verdictLine strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.verdictLine[data-ok] {
+  color: var(--ok);
+}
+
+.verdictLine:not([data-ok]) {
+  color: var(--alert);
+}
+
+.telltale {
+  max-width: 72ch;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+.analysis {
+  display: flex;
+  gap: var(--s-3);
+}
+
+.inset {
+  display: grid;
+  gap: var(--s-1);
+  margin: 0;
+}
+
+.inset canvas {
+  width: 116px;
+  height: 116px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+}
+
+.inset figcaption {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.next {
+  margin-top: var(--s-1);
+}
+
+@media (max-width: 720px) {
+  .layout {
+    padding: var(--s-3);
+    align-content: start;
+  }
+
+  .pair {
+    width: 100%;
+    gap: var(--s-3);
+  }
+
+  .caption > span:nth-child(2) {
+    display: none;
+  }
+
+  .verdict {
+    margin-left: 0;
+  }
+
+  .telltale {
+    font-size: var(--t-small);
+  }
+
+  .explain[data-inset] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .inset canvas {
+    width: 112px;
+    height: 112px;
+  }
+}

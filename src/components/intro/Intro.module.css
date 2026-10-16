@@ -1,0 +1,1348 @@
+/* The stage after the hellos: Lakshya standing on the night ground, no panel.
+   Every piece is placed from a handful of lengths on .stage:
+     --av-h / --av-w   the avatar's 9:16 frame (the figure fills ~88% of its height)
+     --foot            soles above the frame's bottom edge, as a fraction of its height
+     --ground-y        the ground line, up from the viewport's bottom edge
+     --stn-x / --stn-y the survey station at his feet (the contour field's summit)
+   Desktop: avatar in the left third, captions in the middle, actions in the right third.
+   Narrow / portrait: captions on top, avatar bottom-left, actions stacked bottom-right. */
+
+.stage {
+  --gut: clamp(16px, 4vw, 56px);
+  --range: clamp(4rem, 7.6vw, 10.5rem);
+  --range-top: 7svh;
+  --ground-y: 6.5svh;
+  --av-h: 84svh;
+  --av-w: calc(var(--av-h) * 0.5625);
+  --av-col: 32vw;
+  --foot: 0.06; /* the stand-in's; REAL mode measures the poster's lowest opaque row */
+  --stn-x: calc(var(--gut) + var(--av-col) / 2);
+  --stn-y: calc(100svh - var(--ground-y));
+  --col-gap: clamp(28px, 3.2vw, 64px);
+  --act-w: clamp(280px, 25vw, 420px);
+  --band-top: 27svh;
+  --band-bottom: 13svh;
+
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-intro);
+  color: var(--ink-2);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.ground {
+  position: absolute;
+  inset: 0;
+  background: var(--ground);
+}
+
+/* ─── the 3D ground (stageScene.ts): fades in over the flat field once it has drawn ─── */
+.scene {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-4) var(--ease);
+}
+
+.scene[data-on] {
+  opacity: 1;
+}
+
+.stage[data-3d] .field {
+  opacity: 0;
+  transition: opacity var(--dur-4) var(--ease);
+}
+
+/* ─── the contour field, centred on the station ─── */
+.field {
+  --field-r: 72%;
+  position: absolute;
+  left: calc(var(--stn-x) - 96vmax);
+  top: calc(var(--stn-y) - 96vmax);
+  width: 192vmax;
+  height: 192vmax;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+  clip-path: circle(var(--field-r) at 50% 50%);
+  -webkit-mask-image: radial-gradient(closest-side, black 28%, transparent 100%);
+  mask-image: radial-gradient(closest-side, black 28%, transparent 100%);
+}
+
+.fieldMinor,
+.fieldIndex {
+  fill: none;
+}
+
+.fieldMinor path,
+.fieldIndex path {
+  vector-effect: non-scaling-stroke;
+}
+
+.fieldMinor {
+  stroke: var(--z4);
+  stroke-width: 1;
+}
+
+.fieldIndex {
+  stroke: var(--z5);
+  stroke-width: 1.25;
+}
+
+/* ─── the range name, cropped by the viewport ─── */
+.range {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: var(--range-top);
+  display: flex;
+  gap: 0.3em;
+  transform: translateX(-50%);
+  font-size: var(--range);
+  font-weight: 650;
+  font-stretch: 125%;
+  line-height: 1;
+  letter-spacing: var(--track-range);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--z4);
+  pointer-events: none;
+  user-select: none;
+  /* drifts against the pointer (set per frame by the stage); composes with transform */
+  translate: var(--par-x, 0px) var(--par-y, 0px);
+}
+
+.range span:last-child {
+  margin-right: calc(-1 * var(--track-range));
+}
+
+/* ─── line of sight: station → action ─── */
+.sight {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.sightLine {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.5;
+  stroke-dasharray: 7 6;
+}
+
+.sightEnd {
+  fill: var(--z1);
+  stroke: var(--fix);
+  stroke-width: 1.5;
+  opacity: 0;
+}
+
+.sightLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  fill: var(--fix-hi);
+  opacity: 0;
+}
+
+/* ─── the ground line and the survey station ─── */
+.groundLine {
+  position: absolute;
+  z-index: 3;
+  left: calc(var(--gut) * 0.5);
+  width: calc(var(--av-col) + var(--gut) * 0.5);
+  top: var(--stn-y);
+  height: 1px;
+  background: var(--z4);
+  transform-origin: calc(var(--gut) * 0.5 + var(--av-col) / 2) 50%;
+  pointer-events: none;
+}
+
+.groundLine::before,
+.groundLine::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  width: 1px;
+  height: 7px;
+  background: var(--z5);
+}
+
+.groundLine::before {
+  left: 0;
+}
+
+.groundLine::after {
+  right: 0;
+}
+
+.station {
+  position: absolute;
+  z-index: 3;
+  left: var(--stn-x);
+  top: var(--stn-y);
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.ripples {
+  position: absolute;
+  left: calc(var(--av-w) * -1.05);
+  top: calc(var(--av-w) * -0.42);
+  width: calc(var(--av-w) * 2.1);
+  height: calc(var(--av-w) * 0.84);
+  max-width: none;
+  overflow: visible;
+}
+
+.ripple {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.shadow {
+  position: absolute;
+  left: calc(var(--av-w) * -0.3);
+  top: calc(var(--av-w) * -0.06);
+  width: calc(var(--av-w) * 0.6);
+  height: calc(var(--av-w) * 0.12);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--z0), color-mix(in oklab, var(--z0) 60%, transparent) 50%, transparent);
+}
+
+.fix {
+  position: absolute;
+  left: -40px;
+  top: -16px;
+  width: 80px;
+  height: 32px;
+  max-width: none;
+  overflow: visible;
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.5;
+  stroke-linecap: square;
+}
+
+.fix path {
+  vector-effect: non-scaling-stroke;
+}
+
+.trig {
+  position: absolute;
+  left: -7px;
+  top: -8px;
+  width: 14px;
+  height: 14px;
+  overflow: visible;
+  fill: none;
+  stroke: var(--z9);
+  stroke-width: 1.4;
+}
+
+.trig circle {
+  fill: var(--z9);
+  stroke: none;
+}
+
+.stationNote {
+  position: absolute;
+  z-index: 4;
+  left: calc(var(--stn-x) + var(--av-w) * 0.3); /* clear of his feet (real stance spans ±0.2) */
+  bottom: calc(var(--ground-y) + 10px);
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.stationName {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-stretch: 82%;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.trigGlyph {
+  width: 11px;
+  height: 11px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.trigGlyph circle {
+  fill: currentColor;
+  stroke: none;
+}
+
+.coords {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.02em;
+  color: var(--mute);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.standInNote {
+  position: absolute;
+  z-index: 4;
+  left: var(--stn-x);
+  top: calc(var(--stn-y) + 14px);
+  margin: 0;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-stretch: 88%;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+  color: var(--mute);
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ─── the avatar ─── */
+.figure {
+  position: absolute;
+  z-index: 4;
+  left: calc(var(--stn-x) - var(--av-w) * var(--foot-cx, 0.5));
+  bottom: calc(var(--ground-y) - var(--foot) * var(--av-h));
+  width: var(--av-w);
+  height: var(--av-h);
+  pointer-events: none;
+}
+
+.sink {
+  position: absolute;
+  inset: 0;
+  transform-origin: calc(var(--foot-cx, 0.5) * 100%) calc(100% - var(--foot) * 100%);
+}
+
+.frame {
+  --edge: 0;
+  position: absolute;
+  inset: 0;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: auto;
+  cursor: default;
+}
+
+.frame[data-idle] {
+  cursor: pointer;
+}
+
+.frame:focus-visible {
+  outline-offset: -2px;
+}
+
+.canvas,
+.poster,
+.standIn {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+.poster {
+  object-fit: contain;
+  object-position: 50% 100%;
+  clip-path: inset(calc(100% - var(--edge) * 100%) -20% 0 -20%);
+}
+
+.standIn {
+  overflow: visible;
+}
+
+.figMinor,
+.figIndex {
+  fill: none;
+}
+
+.figMinor {
+  stroke: var(--z7);
+  stroke-width: 0.85;
+}
+
+.figIndex {
+  stroke: var(--z9);
+  stroke-width: 1.3;
+}
+
+.figGlow .figMinor,
+.figGlow .figIndex {
+  stroke: var(--fix);
+  stroke-width: 1.4;
+}
+
+.voiceRing {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.breathe {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: breathe 5.2s var(--ease-io) infinite alternate;
+}
+
+@keyframes breathe {
+  to {
+    transform: scale(1.004, 1.009);
+  }
+}
+
+/* the scan line: a fix being acquired, bottom to top */
+.scan {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: calc(var(--edge) * 100%);
+  height: 1.5px;
+  margin-bottom: -1px;
+  background: var(--fix);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 16%, black 84%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 16%, black 84%, transparent);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ─── middle: what he says ─── */
+.talk {
+  position: absolute;
+  z-index: 5;
+  left: calc(var(--gut) + var(--av-col) + var(--col-gap));
+  right: calc(var(--gut) + var(--act-w) + var(--col-gap));
+  top: var(--band-top);
+  bottom: var(--band-bottom);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  min-width: 0;
+}
+
+.speaker {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 32px;
+}
+
+.who {
+  display: inline-flex;
+  gap: 0.55em;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-stretch: 82%;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.dot {
+  color: var(--z6);
+}
+
+.state {
+  color: var(--mute);
+  transition: color var(--dur-2) var(--ease);
+}
+
+.state[data-state="live"] {
+  color: var(--fix);
+}
+
+.meter {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 18px;
+}
+
+.meter span {
+  width: 3px;
+  height: 18px;
+  border-radius: 1px;
+  background: var(--z6);
+  transform: scaleY(calc(0.12 + var(--l, 0) * 0.88));
+  transition: background-color var(--dur-2) var(--ease);
+}
+
+.meter[data-live] span {
+  background: var(--fix);
+}
+
+.transcriptBtn {
+  margin-left: auto;
+  height: 32px;
+  padding: 0 2px;
+  color: var(--ink-3);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-stretch: 100%;
+  text-decoration: underline;
+  text-decoration-color: var(--z6);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  transition:
+    color var(--dur-2) var(--ease),
+    text-decoration-color var(--dur-2) var(--ease);
+}
+
+.transcriptBtn:hover,
+.transcriptBtn[aria-expanded="true"] {
+  color: var(--ink);
+  text-decoration-color: var(--fix);
+}
+
+.captions {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.captionText {
+  margin: 0;
+  max-width: 21em;
+  font-size: clamp(1.5rem, 0.7rem + 1.6vw, 2.75rem);
+  font-weight: 500;
+  font-stretch: 100%;
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+  color: var(--mute);
+  text-wrap: pretty;
+}
+
+.cue {
+  transition: color var(--dur-3) var(--ease);
+}
+
+.cue[data-now] {
+  color: var(--z8);
+  animation: cue-in var(--dur-3) var(--ease) both;
+}
+
+.w {
+  transition: color var(--dur-2) var(--ease);
+}
+
+.w[data-on] {
+  color: var(--ink);
+}
+
+@keyframes cue-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* the prominent voice offer, while he's muted */
+.voiceCta {
+  position: relative;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 52px;
+  padding: 5px var(--s-5) 5px 5px;
+  border: 1px solid var(--fix);
+  border-radius: var(--r-pill);
+  background: var(--z1);
+  color: var(--ink);
+  text-align: left;
+  touch-action: manipulation;
+  transition:
+    background-color var(--dur-2) var(--ease),
+    border-color var(--dur-2) var(--ease);
+}
+
+.voiceCta:hover {
+  background: var(--z2);
+  border-color: var(--fix-hi);
+}
+
+.voiceCta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--fix);
+  border-radius: inherit;
+  pointer-events: none;
+  animation: ping 2.2s var(--ease) infinite;
+}
+
+@keyframes ping {
+  0% {
+    inset: 0;
+    opacity: 0.9;
+  }
+
+  70%,
+  100% {
+    inset: -12px;
+    opacity: 0;
+  }
+}
+
+.stage[data-calm] .voiceCta::after {
+  animation: none;
+  inset: -5px;
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voiceCta::after {
+    animation: none;
+    inset: -5px;
+    opacity: 0.5;
+  }
+}
+
+.puck {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--fix);
+  color: var(--fix-ink);
+}
+
+.vtext {
+  display: grid;
+  gap: 1px;
+  line-height: 1.15;
+}
+
+.vtext strong {
+  font-size: 1rem;
+  font-weight: 650;
+  font-stretch: 108%;
+}
+
+.vtext small {
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.transcriptPanel {
+  position: absolute;
+  z-index: 6;
+  left: 0;
+  right: 0;
+  top: 44px;
+  max-height: min(52svh, 420px);
+  overflow-y: auto;
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-2);
+  background: var(--z2);
+  box-shadow: var(--shadow-2);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  color: var(--ink-2);
+  user-select: text;
+  animation: cue-in var(--dur-2) var(--ease) both;
+}
+
+.transcriptPanel p + p {
+  margin-top: var(--s-3);
+}
+
+/* ─── right third: the résumé first ─── */
+.actions {
+  position: absolute;
+  z-index: 6;
+  right: var(--gut);
+  width: var(--act-w);
+  top: var(--band-top);
+  bottom: var(--band-bottom);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--s-3);
+}
+
+.resume {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--s-4);
+  min-height: 104px;
+  padding: var(--s-4) var(--s-5) var(--s-4) var(--s-4);
+  border-radius: var(--r-1);
+  background: var(--fix);
+  color: var(--fix-ink);
+  text-decoration: none;
+  box-shadow: var(--shadow-2);
+  /* no transform transition: GSAP owns this element's transform (its entrance) */
+  transition: background-color var(--dur-2) var(--ease);
+}
+
+.resume:hover {
+  background: var(--fix-hi);
+}
+
+.resume:focus-visible {
+  outline-color: var(--ink);
+}
+
+.resumeIcon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-1);
+  background: var(--fix-ink);
+  color: var(--fix);
+}
+
+.resumeIcon svg {
+  transition: transform var(--dur-2) var(--ease);
+}
+
+.resume:hover .resumeIcon svg {
+  transform: translateY(2px);
+}
+
+.resumeText {
+  display: grid;
+  gap: 5px;
+  line-height: 1.1;
+}
+
+.resumeText strong {
+  font-size: clamp(1.25rem, 0.85rem + 0.75vw, 1.75rem);
+  font-weight: 650;
+  font-stretch: 106%;
+  letter-spacing: -0.01em;
+}
+
+.resumeText small {
+  font-size: var(--t-small);
+  font-weight: 600;
+  font-stretch: 90%;
+  letter-spacing: 0.02em;
+  color: color-mix(in oklab, var(--fix-ink) 72%, var(--fix));
+}
+
+/* the way in: the stage's one paper-white slab. Once he has spoken it fills with survey orange
+   over the countdown (--cd 0→1, set per frame) while the ring round its puck closes */
+.enter {
+  --cd: 0;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  min-height: 80px;
+  padding: var(--s-3) var(--s-3) var(--s-3) var(--s-5);
+  overflow: hidden;
+  border-radius: var(--r-1);
+  background: var(--ink);
+  color: var(--z0);
+  text-align: left;
+  box-shadow: var(--shadow-2);
+  touch-action: manipulation;
+  /* no transform transition: GSAP owns this element's transform (its entrance) */
+  transition: background-color var(--dur-2) var(--ease);
+}
+
+.enter:hover {
+  background: var(--z9);
+}
+
+.enter:focus-visible {
+  outline-color: var(--ink);
+}
+
+.enterFill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--fix);
+  transform: scaleX(var(--cd));
+  transform-origin: 0 50%;
+}
+
+.enterText {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  line-height: 1.1;
+}
+
+.enterText strong {
+  font-size: clamp(1.1875rem, 0.85rem + 0.6vw, 1.5rem);
+  font-weight: 700;
+  font-stretch: 108%;
+  letter-spacing: -0.01em;
+}
+
+.enterText small {
+  font-size: var(--t-small);
+  font-weight: 600;
+  font-stretch: 90%;
+  letter-spacing: 0.02em;
+  color: var(--z4);
+  font-variant-numeric: tabular-nums;
+}
+
+.enterPuck {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--z0);
+  color: var(--ink);
+}
+
+.enterPuck > svg:not(.ring) {
+  transition: transform var(--dur-2) var(--ease);
+}
+
+.enter:hover .enterPuck > svg:not(.ring) {
+  transform: translateX(3px);
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  fill: none;
+  stroke-width: 2.5;
+  opacity: 0;
+  transition: opacity var(--dur-2) var(--ease);
+}
+
+.enter[data-count] .ring {
+  opacity: 1;
+}
+
+.ringTrack {
+  stroke: var(--z4);
+}
+
+.ringRun {
+  stroke: var(--fix);
+  stroke-dasharray: var(--ring);
+  stroke-dashoffset: calc((1 - var(--cd)) * var(--ring));
+}
+
+.enter[data-count="held"] .ringRun {
+  stroke: var(--z7);
+}
+
+.secs {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-stretch: 100%;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── field notes: what's tappable, in the surveyor's hand ─── */
+.hintAvatar,
+.hintGround {
+  position: absolute;
+  z-index: 5;
+  margin: 0;
+  font-family: var(--font-kalam);
+  font-size: clamp(1rem, 0.85rem + 0.3vw, 1.1875rem);
+  line-height: 1.15;
+  color: var(--ink-3);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-3) var(--ease);
+}
+
+.hintAvatar[data-show],
+.hintGround[data-show] {
+  opacity: 1;
+}
+
+.hintAvatar {
+  left: calc(var(--stn-x) + var(--av-w) * 0.2);
+  bottom: calc(var(--ground-y) + var(--av-h) * 0.83);
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  transform: rotate(-3deg);
+  transform-origin: 0 100%;
+}
+
+.hintArrow {
+  flex: none;
+  width: 34px;
+  height: 21px;
+  margin-bottom: -10px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  order: -1;
+  transform: rotate(-6deg);
+}
+
+.hintGround {
+  left: calc(var(--gut) + var(--av-col) + var(--col-gap));
+  bottom: calc(var(--ground-y) - 2px);
+  transform: rotate(-2deg);
+}
+
+.minor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: var(--s-1);
+}
+
+.small {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  background: var(--z1);
+  color: var(--ink-3);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-stretch: 90%;
+  white-space: nowrap;
+  transition:
+    color var(--dur-2) var(--ease),
+    border-color var(--dur-2) var(--ease);
+}
+
+.small:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.small[aria-pressed="true"] svg {
+  color: var(--fix);
+}
+
+/* ─── skip: always there ─── */
+.skip {
+  position: absolute;
+  z-index: 7;
+  top: max(var(--s-5), env(safe-area-inset-top));
+  right: var(--gut);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  height: 40px;
+  padding: 0 var(--s-2) 0 var(--s-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  background: var(--z1);
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-stretch: 108%;
+  transition:
+    border-color var(--dur-2) var(--ease),
+    color var(--dur-2) var(--ease);
+}
+
+.skip:hover {
+  border-color: var(--fix);
+  color: var(--fix-hi);
+}
+
+.skip kbd {
+  font-size: 0.6875rem;
+  color: var(--ink-3);
+  background: var(--z2);
+}
+
+@media (hover: none) {
+  .skip {
+    padding-right: var(--s-4);
+  }
+
+  .skip kbd {
+    display: none;
+  }
+}
+
+/* the bottom edge while the stage lifts away */
+.skirt {
+  position: absolute;
+  left: 0;
+  top: calc(100% - 1px);
+  width: 100%;
+  height: 7vh;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.skirtFill {
+  fill: var(--ground);
+}
+
+.skirtEdge {
+  fill: none;
+  stroke: var(--contour-index);
+  stroke-width: 1.25;
+}
+
+/* ─── mid widths: a narrower talk column ─── */
+@media (min-width: 721px) and (max-width: 1180px) {
+  .stage {
+    --act-w: clamp(250px, 27vw, 320px);
+    --col-gap: 24px;
+  }
+
+  .captionText {
+    font-size: clamp(1.25rem, 0.6rem + 1.5vw, 1.75rem);
+  }
+
+  .resume {
+    min-height: 92px;
+    padding: var(--s-3) var(--s-4) var(--s-3) var(--s-3);
+  }
+
+  .resumeIcon {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ─── narrow or portrait: captions on top, avatar bottom-left, actions bottom-right ─── */
+@media (max-width: 720px), (max-aspect-ratio: 4/5) {
+  .stage {
+    --gut: 16px;
+    --range: min(12.4vw, 4.6rem);
+    --top-h: calc(8px + 2 * var(--range) * 0.92);
+    --ground-y: 62px;
+    --av-w: min(48vw, (100svh - 330px) * 0.5625);
+    --av-h: calc(var(--av-w) / 0.5625);
+    --stn-x: calc(var(--av-w) / 2 + 2px);
+  }
+
+  .range {
+    left: 0;
+    right: 0;
+    top: 8px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    transform: none;
+    line-height: 0.92;
+  }
+
+  .range span:first-child {
+    justify-self: start;
+    margin-left: -0.06em;
+  }
+
+  .range span:last-child {
+    justify-self: end;
+    margin-right: calc(-1 * var(--track-range) - 0.08em);
+  }
+
+  .groundLine {
+    left: 2px;
+    width: var(--av-w);
+    transform-origin: calc(var(--av-w) / 2) 50%;
+  }
+
+  .stationNote {
+    left: var(--stn-x);
+    bottom: auto;
+    top: calc(var(--stn-y) + 9px);
+    justify-items: center;
+    transform: translateX(-50%);
+  }
+
+  .stationName {
+    display: none;
+  }
+
+  .hintGround {
+    display: none;
+  }
+
+  .hintAvatar {
+    bottom: calc(var(--ground-y) + var(--av-h) * 0.78);
+  }
+
+  .standInNote {
+    top: calc(var(--stn-y) + 27px);
+    width: calc(var(--av-w) - 8px);
+    font-size: 0.6875rem;
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .talk {
+    left: var(--gut);
+    right: var(--gut);
+    top: calc(var(--top-h) + 14px);
+    bottom: auto;
+    gap: var(--s-3);
+  }
+
+  .captions {
+    flex: none;
+  }
+
+  .captionText {
+    max-width: none;
+    font-size: clamp(1.0625rem, 0.55rem + 2.5vw, 1.625rem);
+    line-height: 1.3;
+  }
+
+  .voiceCta {
+    min-height: 46px;
+  }
+
+  .puck {
+    width: 36px;
+    height: 36px;
+  }
+
+  .vtext strong {
+    font-size: 0.9375rem;
+  }
+
+  .vtext small {
+    font-size: 0.75rem;
+  }
+
+  .transcriptPanel {
+    top: 40px;
+    max-height: 56svh;
+  }
+
+  .actions {
+    left: calc(var(--av-w) + 10px);
+    right: var(--gut);
+    width: auto;
+    top: auto;
+    bottom: max(var(--s-4), env(safe-area-inset-bottom));
+    justify-content: flex-end;
+    gap: var(--s-2);
+  }
+
+  .minor {
+    margin-top: 0;
+  }
+
+  .skip {
+    top: max(8px, env(safe-area-inset-top));
+    height: 36px;
+  }
+}
+
+/* phones: compact actions that still fit beside him */
+@media (max-width: 560px) {
+  .resume {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 10px;
+    min-height: 0;
+    padding: 12px;
+  }
+
+  .resumeIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .resumeText strong {
+    font-size: 1.125rem;
+    line-height: 1.05;
+  }
+
+  .resumeText small {
+    font-size: 0.75rem;
+  }
+
+  .enter {
+    min-height: 58px;
+    padding: 6px 6px 6px 10px;
+    gap: 6px;
+  }
+
+  .enterText strong {
+    font-size: 1rem;
+    font-stretch: 94%;
+    white-space: nowrap;
+  }
+
+  .enterText small {
+    font-size: 0.6875rem;
+  }
+
+  .enter:not([data-count]) .enterText small {
+    display: none;
+  }
+
+  .enterPuck {
+    width: 36px;
+    height: 36px;
+  }
+
+  .secs {
+    font-size: 1rem;
+  }
+
+  .minor {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .small {
+    flex-direction: column;
+    justify-content: center;
+    height: auto;
+    min-height: 54px;
+    padding: 6px 2px;
+    gap: 4px;
+    font-size: 0.6875rem;
+    font-stretch: 86%;
+    line-height: 1.1;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .who {
+    font-size: 0.6875rem;
+  }
+
+  .transcriptBtn {
+    font-size: 0.8125rem;
+  }
+}
+
+/* short phones (360×640 class) */
+@media (max-width: 560px) and (max-height: 700px) {
+  .stage {
+    --ground-y: 58px;
+  }
+
+  .captionText {
+    font-size: 1rem;
+  }
+
+  .talk {
+    top: calc(var(--top-h) + 8px);
+    gap: 10px;
+  }
+
+  .enter {
+    min-height: 50px;
+  }
+
+  .small {
+    min-height: 50px;
+  }
+}
+
+/* phones held sideways: the desktop columns, no range name */
+@media (max-height: 520px) and (orientation: landscape) {
+  .stage {
+    --band-top: 14svh;
+    --band-bottom: 8svh;
+    --act-w: clamp(220px, 30vw, 300px);
+    --col-gap: 20px;
+  }
+
+  .range,
+  .stationNote {
+    display: none;
+  }
+
+  .captionText {
+    font-size: 1.0625rem;
+  }
+
+  .resume {
+    min-height: 0;
+    padding: 10px 12px;
+  }
+
+  .resumeIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .resumeText strong {
+    font-size: 1.125rem;
+  }
+
+  .enter {
+    min-height: 52px;
+  }
+
+  .enterPuck {
+    width: 38px;
+    height: 38px;
+  }
+
+  .skip {
+    top: var(--s-3);
+  }
+}

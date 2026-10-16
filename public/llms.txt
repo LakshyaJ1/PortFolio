@@ -1,0 +1,30 @@
+# Lakshya Jain — AI Engineer
+
+> Personal portfolio of Lakshya Jain, an AI engineer in Delhi, India, building production agentic systems: human-in-the-loop LLM platforms, retrieval pipelines and on-device models, with a background in robotics and extended reality. Every fact below is from his résumé.
+
+## Contact
+
+- Email: 10jainlakshya@gmail.com
+- Book a 30-minute call: https://cal.com/lakshyajain/30min
+- GitHub: https://github.com/LakshyaJ1
+- LinkedIn: https://www.linkedin.com/in/lakshya-jain-86b091292/
+- Résumé (PDF): /Lakshya-Jain-Resume.pdf
+
+## Experience
+
+- Hive Pro, Inc. — AI Engineer Intern (Jun 2026 – present, remote, Dubai). Production AI platforms (ISMS portal, customer onboarding and sales outreach agents); human-in-the-loop systems with approval workflows, RBAC, tenant isolation and policy guardrails; LLM/agent pipelines with Claude, LangGraph, RAG and embeddings, integrated with HubSpot, Slack, Gmail, Fathom and NATS; security and risk audits.
+- Rainwire Solutions (WARDEC – Indian Army) — AI Engineer Intern (Jan – May 2026, New Delhi). Secure mobile app under NDA; fine-tuned an 8B LLM for 3-way classification (88–92% accuracy); Playwright/Selenium data pipeline; deepfake detection for video, images, text and URLs.
+- Scrini AI — AI Engineer Intern (Dec 2025 – Feb 2026, remote). Semantic resume search over 10K+ profiles with sub-50 ms retrieval (FastAPI, Qdrant, HNSW); hybrid retrieval with cross-encoder reranking; Dockerised 3-tier deployment.
+- IIT Delhi, FSM Lab — XR Intern (Jan – Apr 2025). Unity/C# industrial training toolkit that cut onboarding time by 75%; voice-to-CAD pipeline in Flask; 98% mechanical fidelity.
+- Maker's Asylum — Technical Mentor (Apr 2025 – present). Mentored 250+ students in robotics and computer vision.
+- A.T.O.M Robotics Lab — Technical Team Member (Oct 2024 – present). ROS2 GPS navigation for a Mars rover prototype; LiDAR + IMU sensor fusion.
+
+## Projects
+
+- SETU — GPS-denied egomotion tracking on Android: spectral velocity odometry from accelerometer vibrations, a 207 KB on-device CNN-GRU model (1–5 ms inference), 227 Hz sensor pipeline. https://setu-six-jet.vercel.app/
+- Product Pricing Prediction (Amazon ML Challenge) — multimodal BERT + ResNet embeddings, XGBoost/LightGBM ensemble, 21.06% SMAPE, top 20% globally.
+- TokenForge — Aptos token launchpad with Move contract generation; launched "Lakshyacoin".
+
+## Education
+
+- B.Tech CSE (AI/ML), Maharaja Agrasen Institute of Technology, 2023–2027, CGPA 9.0+.

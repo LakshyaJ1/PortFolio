@@ -1,0 +1,266 @@
+.frame {
+  margin: 0;
+  display: grid;
+  gap: var(--s-3);
+  width: 100%;
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-3);
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--t-small);
+  font-weight: 600;
+  font-stretch: 88%;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.station {
+  margin-left: auto;
+  font-size: var(--t-small);
+  font-stretch: 80%;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+/* the domain, in plain words: printed in the fix because it names the active line */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 var(--s-3) 0 var(--s-2);
+  border: 1px solid var(--fix);
+  border-radius: var(--r-1);
+  background: var(--ground);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-stretch: 100%;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--fix-hi);
+}
+
+.badge svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+/* bold key figures: résumé numbers set large, each with what it counts underneath */
+.figures {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3) 0;
+}
+
+.figure {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  min-width: 0;
+  padding-right: var(--s-5);
+  margin-right: var(--s-5);
+  border-right: 1px solid var(--line-strong);
+}
+
+.figure:last-child {
+  padding-right: 0;
+  margin-right: 0;
+  border-right: 0;
+}
+
+.figure dd {
+  order: -1;
+  margin: 0;
+  font-size: clamp(1.5rem, 1.1rem + 1vw, 2.125rem);
+  font-weight: 800;
+  font-stretch: 100%;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.figure dt {
+  font-size: var(--t-small);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--ink-3);
+}
+
+/* the ruled scope: a graticule every 32px with an index line every 160px */
+.scope {
+  position: relative;
+  aspect-ratio: var(--aspect, 3 / 2);
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  background-color: var(--sheet);
+  background-image:
+    linear-gradient(var(--z4) 1px, transparent 1px),
+    linear-gradient(90deg, var(--z4) 1px, transparent 1px),
+    linear-gradient(var(--z3) 1px, transparent 1px),
+    linear-gradient(90deg, var(--z3) 1px, transparent 1px);
+  background-size:
+    160px 160px,
+    160px 160px,
+    32px 32px,
+    32px 32px;
+  background-position: -1px -1px;
+  isolation: isolate;
+}
+
+.scope > canvas,
+.scope > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* "Simulated" is a label, not data: Archivo condensed caps */
+.sim,
+.axis {
+  position: absolute;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-size: 0.625rem;
+  font-weight: 600;
+  font-stretch: 80%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.sim {
+  top: var(--s-2);
+  right: var(--s-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 6px;
+  background: var(--sheet);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+}
+
+.simMark {
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--ink-3);
+}
+
+/* the axis note is a caption, not data: Archivo condensed */
+.axis {
+  left: var(--s-3);
+  bottom: var(--s-2);
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-stretch: 80%;
+  letter-spacing: 0.06em;
+  text-transform: none;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-4);
+  min-height: 32px;
+}
+
+.readouts {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-top: 1px solid var(--line-strong);
+  /* tick marks along the readout rule */
+  background: repeating-linear-gradient(90deg, var(--z5) 0 1px, transparent 1px 16px) top left / 100% 4px no-repeat;
+}
+
+.readout {
+  display: grid;
+  gap: 2px;
+  padding: var(--s-2) var(--s-4) 0 0;
+  margin-right: var(--s-4);
+  min-width: 0;
+}
+
+.readout dt {
+  font-size: 0.6875rem;
+  font-stretch: 80%;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.readout dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.caption {
+  max-width: 54ch;
+  font-size: var(--t-small);
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.link:hover {
+  color: var(--fix-hi);
+}
+
+.frame[data-compact] .caption {
+  font-size: var(--t-small);
+}
+
+@media (max-width: 720px) {
+  .readout {
+    margin-right: var(--s-2);
+    padding-right: var(--s-2);
+  }
+
+  .figure {
+    padding-right: var(--s-4);
+    margin-right: var(--s-4);
+  }
+
+  .scope {
+    background-size:
+      128px 128px,
+      128px 128px,
+      32px 32px,
+      32px 32px;
+  }
+}

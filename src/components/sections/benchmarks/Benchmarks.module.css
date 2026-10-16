@@ -1,0 +1,173 @@
+.profile {
+  --band: 44px;
+  --inset: 4%;
+  --fig: clamp(2.25rem, 1.3rem + 2.2vw, 3.375rem);
+  position: relative;
+}
+
+.posts {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+/* ─── a benchmark post: a staff driven into the profile, its figure flying to the right ─── */
+.post {
+  position: relative;
+  padding: var(--s-1) var(--s-3) calc(var(--band) + var(--s-4)) calc(var(--inset) + 14px);
+}
+
+.stem {
+  position: absolute;
+  left: var(--inset);
+  top: 0.35rem;
+  bottom: calc(var(--band) * (1 - var(--y)));
+  width: 1px;
+  background: var(--ink-3);
+  transform-origin: 50% 100%;
+}
+
+.stem::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -5px;
+  width: 11px;
+  height: 1px;
+  background: var(--ink-3);
+}
+
+.foot {
+  position: absolute;
+  left: var(--inset);
+  bottom: calc(var(--band) * (1 - var(--y)));
+  display: grid;
+  color: var(--ink-2);
+  transform: translate(-50%, 79%); /* the cut bar sits on the surface */
+}
+
+.label {
+  display: grid;
+  align-content: start;
+}
+
+/* one height for every figure, so the names below line up across the strip */
+.figure {
+  display: flex;
+  align-items: flex-end;
+  height: var(--fig);
+  margin-bottom: var(--s-2);
+  line-height: 1;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.num {
+  font-size: var(--fig);
+  font-weight: 650;
+  font-stretch: 112%;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.affix {
+  padding-bottom: 0.12em;
+  font-size: clamp(1.125rem, 0.8rem + 0.9vw, 1.625rem);
+  font-weight: 600;
+  color: var(--ink-2);
+  white-space: pre;
+}
+
+/* a word in place of a figure (Winner, Creativity): same weight, narrower set so it fits the column */
+.figure[data-word] {
+  font-size: clamp(1.5rem, 0.9rem + 1.2vw, 2.125rem);
+  font-weight: 650;
+  font-stretch: 88%;
+  letter-spacing: -0.01em;
+}
+
+.name {
+  font-size: 0.9375rem;
+  font-weight: 650;
+  font-stretch: 96%;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+}
+
+.note {
+  margin-top: 2px;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--ink-3);
+}
+
+/* ─── wide: one continuous cross-section under the posts ─── */
+.hband {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--band);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.hground {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(-45deg, var(--z4) 0 1px, transparent 1px 7px);
+}
+
+.hline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hline path {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ─── tablets and phones: a tight grid of figures, no profile ─── */
+@media (max-width: 1023.98px) {
+  .profile {
+    --fig: clamp(2rem, 1.4rem + 2.4vw, 2.75rem);
+  }
+
+  .posts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-bottom: 1px solid var(--line);
+  }
+
+  .post {
+    padding: var(--s-3) var(--s-3) var(--s-4) 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .stem,
+  .foot,
+  .hband {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .posts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--s-4);
+  }
+
+  .post {
+    padding-right: 0;
+  }
+
+  .name {
+    font-size: var(--t-small);
+  }
+}

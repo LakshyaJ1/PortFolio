@@ -1,0 +1,325 @@
+/* ─── pinned band (desktop) ─── */
+.root {
+  position: relative;
+  /* the stage's upper third is empty until the words scroll up into it, so tuck it into the heading's
+     bottom margin (same clamp as Sheet .head): the heading has just left the viewport when the pin starts */
+  margin-top: calc(-1 * clamp(20px, 3.5vh, 40px));
+}
+
+.stage {
+  /* the line of position: where the band sits in the stage (shared by band, ticks and the LOP rule) */
+  --band-at: 32%;
+  position: relative;
+  height: 100svh;
+  min-height: 680px;
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  column-gap: var(--s-8);
+  padding-block: var(--s-5) var(--s-6);
+}
+
+.words {
+  /* sized so the longest word and its label share the column without clipping */
+  --fs: clamp(2.75rem, 4.9vw, 4.75rem);
+  --row: calc(var(--fs) * 1.08);
+  --band-top: calc(var(--band-at) - var(--row) / 2);
+  --p: 0;
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 84%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 84%, transparent 100%);
+}
+
+.stack {
+  position: absolute;
+  inset-inline: 0;
+  top: var(--band-top);
+  display: flex;
+  flex-direction: column;
+  transform: translate3d(0, calc(var(--p) * var(--row) * -1), 0);
+  will-change: transform;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-5);
+  height: var(--row);
+  padding-inline: 0.12em var(--s-5);
+  font-size: var(--fs);
+  text-align: left;
+  color: var(--z9);
+  border-radius: 0;
+  transition: color var(--dur-2) var(--ease);
+}
+
+button.row:hover {
+  color: var(--ink);
+}
+
+button.row:focus-visible {
+  outline: 2px solid var(--fix);
+  outline-offset: -4px;
+}
+
+.word {
+  font-family: var(--font-display);
+  font-size: 1em;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* where it shipped, then the figure that sells it: two lines, right-aligned in the row */
+.tag {
+  flex-shrink: 0;
+  display: grid;
+  justify-items: end;
+  gap: 0.35em;
+  font-size: clamp(0.875rem, 0.5rem + 0.48vw, 1.0625rem);
+  line-height: 1.1;
+  text-align: right;
+  color: var(--z8);
+  white-space: nowrap;
+}
+
+.tagOrg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  font-weight: 700;
+  font-stretch: 100%;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+.tagGlyph {
+  flex-shrink: 0;
+  color: var(--fix);
+}
+
+.tagYear {
+  font-family: var(--font-mono);
+  font-size: 0.72em;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--mute);
+  font-variant-numeric: tabular-nums;
+}
+
+/* an ongoing role: a small orange stamp */
+.tagNow {
+  padding: 0.18em 0.45em;
+  font-size: 0.62em;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fix-ink);
+  background: var(--fix);
+}
+
+.tagHook {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+}
+
+.tagHookV {
+  font-family: var(--font-display);
+  font-size: 1.45em;
+  font-weight: 800;
+  font-stretch: 100%;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.tagHookK {
+  font-size: 0.8em;
+  color: var(--mute);
+}
+
+/* the line-of-position band: a clipped duplicate printed in fix-ink */
+.band {
+  position: absolute;
+  inset: 0;
+  background: var(--fix);
+  clip-path: inset(var(--band-top) 0 calc(100% - var(--band-top) - var(--row)) 0);
+  pointer-events: none;
+}
+
+.band .row,
+.band .tag,
+.band .tag * {
+  color: var(--fix-ink);
+}
+
+/* inside the orange band the stamp flips to ink-on-paper so it still reads as a stamp */
+.band .tagNow {
+  color: var(--fix);
+  background: var(--fix-ink);
+}
+
+/* survey ticks at the band's ends */
+.bandTicks {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(var(--band-top) - 10px);
+  height: calc(var(--row) + 20px);
+  pointer-events: none;
+  background:
+    linear-gradient(var(--fix), var(--fix)) left top / 1px 6px no-repeat,
+    linear-gradient(var(--fix), var(--fix)) left bottom / 1px 6px no-repeat,
+    linear-gradient(var(--fix), var(--fix)) right top / 1px 6px no-repeat,
+    linear-gradient(var(--fix), var(--fix)) right bottom / 1px 6px no-repeat;
+}
+
+.bench {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* the line of position runs on from the band to the instrument it names */
+.lop {
+  position: absolute;
+  top: var(--band-at);
+  left: calc(-1 * var(--s-8));
+  width: calc(var(--s-8) - var(--s-2));
+  height: 1px;
+  background: var(--fix);
+}
+
+.lop::after {
+  content: "";
+  position: absolute;
+  right: -4px;
+  top: -3.5px;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--fix);
+  border-radius: 50%;
+  background: var(--ground);
+}
+
+.panels {
+  display: grid;
+  width: 100%;
+}
+
+.panel {
+  grid-area: 1 / 1;
+  min-width: 0;
+  align-self: center;
+  clip-path: inset(0 0 0 0);
+  transition:
+    clip-path var(--dur-4) var(--ease),
+    opacity var(--dur-3) var(--ease);
+}
+
+.panel[data-state="before"] {
+  clip-path: inset(0 0 100% 0);
+  opacity: 0;
+}
+
+.panel[data-state="after"] {
+  clip-path: inset(100% 0 0 0);
+  opacity: 0;
+}
+
+/* ─── stacked (phones, reduced motion, plain sheet) ─── */
+.list {
+  display: grid;
+  gap: var(--s-8);
+  counter-reset: none;
+}
+
+.item {
+  display: grid;
+  gap: var(--s-5);
+  min-width: 0;
+}
+
+.itemHead {
+  display: grid;
+  gap: var(--s-2);
+  justify-items: start;
+}
+
+.itemWord {
+  position: relative;
+  font-size: clamp(2.75rem, 12.5vw, 6rem);
+  font-weight: 800;
+  font-stretch: 100%;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--z9);
+  white-space: nowrap;
+}
+
+.itemBase {
+  display: block;
+  padding: 0.04em 0.14em;
+}
+
+.itemBand {
+  position: absolute;
+  inset: 0;
+  padding: 0.04em 0.14em;
+  background: var(--fix);
+  color: var(--fix-ink);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--dur-4) var(--ease);
+}
+
+.itemWord[data-active] .itemBand {
+  clip-path: inset(0 0 0 0);
+}
+
+/* phones: the same label under the word, left-aligned */
+.itemTag {
+  justify-items: start;
+  text-align: left;
+}
+
+.itemBench {
+  min-width: 0;
+  max-width: 720px;
+}
+
+.placeholder {
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  background: var(--sheet);
+}
+
+@media (min-width: 1024px) {
+  .item {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--s-8);
+    align-items: start;
+  }
+
+  .itemHead {
+    position: sticky;
+    top: var(--s-8);
+  }
+
+  .itemWord {
+    font-size: clamp(3rem, 5.2vw, 5.5rem);
+    font-stretch: 112%;
+  }
+}
+
+@media (max-width: 720px) {
+  .list {
+    gap: var(--s-8);
+  }
+}
+

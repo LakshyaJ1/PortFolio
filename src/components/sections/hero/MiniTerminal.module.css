@@ -1,0 +1,195 @@
+/* The landing sheet's inline field terminal: a real prompt, typing on its own until touched. */
+
+.term {
+  --row: 1.62em;
+  display: grid;
+  width: min(100%, 31rem);
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-2);
+  background: var(--z0);
+  box-shadow: var(--shadow-1);
+  color: var(--ink-2);
+  font: inherit;
+  text-align: left;
+  cursor: text;
+  pointer-events: auto;
+  transition:
+    border-color var(--dur-2) var(--ease),
+    box-shadow var(--dur-3) var(--ease),
+    transform var(--dur-3) var(--ease);
+}
+
+.term:hover {
+  border-color: var(--fix);
+  box-shadow: var(--shadow-2);
+  transform: translateY(-2px);
+}
+
+.term:focus-visible {
+  border-color: var(--fix);
+  outline-offset: 4px;
+  border-radius: var(--r-2);
+}
+
+/* ── title bar ── */
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: 7px var(--s-3) 7px var(--s-4);
+  border-bottom: 1px solid var(--line);
+  border-radius: var(--r-2) var(--r-2) 0 0;
+  background: var(--sheet);
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-small);
+  font-weight: 620;
+  font-stretch: 92%;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+.title svg {
+  color: var(--fix);
+}
+
+.hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-stretch: 88%;
+  white-space: nowrap;
+  color: var(--ink-3);
+  transition: color var(--dur-2) var(--ease);
+}
+
+.hint kbd {
+  margin-left: 2px;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.hint svg {
+  flex: none;
+  transition:
+    transform var(--dur-3) var(--ease),
+    color var(--dur-2) var(--ease);
+}
+
+.term:hover .hint,
+.term:focus-visible .hint {
+  color: var(--ink);
+}
+
+.term:hover .hint svg,
+.term:focus-visible .hint svg {
+  color: var(--fix);
+  transform: translate(2px, -2px);
+}
+
+.coarse {
+  display: none;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .fine {
+    display: none;
+  }
+
+  .coarse {
+    display: inline;
+  }
+}
+
+/* ── scrollback: the newest rows sit on the floor, older ones scroll out of the top ── */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: calc(4 * var(--row) + 2 * var(--s-3));
+  padding: var(--s-3) var(--s-4);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  line-height: var(--row);
+}
+
+.row {
+  display: block;
+  flex: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--ink);
+}
+
+.row[data-kind="out"] {
+  color: var(--ink-3);
+}
+
+.ps {
+  color: var(--fix);
+}
+
+.caret {
+  display: inline-block;
+  width: 0.62em;
+  height: 1.2em;
+  margin-left: 1px;
+  vertical-align: -0.25em;
+  background: var(--fix);
+  animation: blink 1.1s steps(1) infinite;
+}
+
+/* a real prompt holds its cursor solid while keys land */
+.term[data-typing] .caret {
+  animation: none;
+}
+
+.term:hover .caret {
+  background: var(--fix-hi);
+}
+
+/* fish-style suggestion of what to type first */
+.ghost {
+  margin-left: 2px;
+  color: var(--mute);
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term,
+  .term:hover {
+    transform: none;
+  }
+
+  .caret {
+    animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .term {
+    width: 100%;
+  }
+
+  .body {
+    padding-inline: var(--s-3);
+    font-size: 0.71875rem;
+  }
+}

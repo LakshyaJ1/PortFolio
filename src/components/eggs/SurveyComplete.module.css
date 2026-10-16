@@ -1,0 +1,136 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--layer-overlay) + 3);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--z0) 55%, transparent);
+  animation:
+    in var(--dur-2) var(--ease) both,
+    out var(--dur-3) var(--ease) 3.5s forwards;
+}
+
+.rings {
+  position: absolute;
+  width: min(1000px, 130vmin);
+  height: auto;
+  overflow: visible;
+}
+
+.ring {
+  fill: none;
+  stroke: var(--contour-index);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 1.1s var(--ease) forwards;
+}
+
+.ring[data-index] {
+  stroke: var(--z8);
+  stroke-width: 1.8;
+}
+
+.summit {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lock var(--dur-3) var(--ease) 0.85s both;
+}
+
+.pip {
+  fill: var(--fix);
+  stroke: none;
+}
+
+.plate {
+  position: absolute;
+  top: calc(50% + min(11vmin, 96px));
+  left: 50%;
+  translate: -50% 0;
+  width: max-content;
+  max-width: calc(100vw - 2 * var(--s-4));
+  display: grid;
+  justify-items: center;
+  gap: var(--s-2);
+  padding: var(--s-4) var(--s-6);
+  background: var(--z2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  box-shadow: var(--shadow-2);
+  text-align: center;
+  animation: rise var(--dur-3) var(--ease) 1s both;
+}
+
+.title {
+  font-size: clamp(1.25rem, 0.9rem + 1.8vw, 2.25rem);
+  font-weight: 650;
+  font-stretch: 125%;
+  letter-spacing: var(--track-range);
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-right: calc(-1 * var(--track-range));
+}
+
+.sub {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.root[data-calm] .ring {
+  animation: none;
+  stroke-dashoffset: 0;
+}
+
+.root[data-calm] .summit,
+.root[data-calm] .plate {
+  animation: none;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes lock {
+  from {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+}
+
+@keyframes in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes out {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring {
+    stroke-dashoffset: 0;
+  }
+}

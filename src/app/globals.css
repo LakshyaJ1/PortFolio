@@ -1,0 +1,351 @@
+@import "lenis/dist/lenis.css";
+
+/* ─────────────────────────────────────────────────────────────
+   Night survey sheet — design tokens
+   Every tone snaps to the 11-step zone ramp (z0 deepest → z10 paper).
+   Survey orange marks fixes and actions only. Hydro blue is reserved
+   for italic "water" words, the cartographic convention.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --z0: #060907;
+  --z1: #0b100d;
+  --z2: #111814;
+  --z3: #18211c;
+  --z4: #212c26;
+  --z5: #2f3c35;
+  --z6: #46554c;
+  --z7: #6f7f75;
+  --z8: #9eaba2;
+  --z9: #cfd8d1;
+  --z10: #eef2ec;
+
+  --ground: var(--z1);
+  --sheet: var(--z2);
+  --sheet-2: var(--z3);
+  --line: var(--z4);
+  --line-strong: var(--z5);
+  --contour: var(--z5);
+  --contour-index: var(--z6);
+
+  --ink: var(--z10);
+  --ink-2: var(--z9);
+  --ink-3: var(--z8);
+  --mute: var(--z7); /* ≥4.5:1 on ground only; use --ink-3 on sheets */
+
+  --fix: #ff5b23;
+  --fix-hi: #ff7a45;
+  --fix-ink: var(--z0);
+  --hydro: #7cc4f2;
+  --alert: #ff5470;
+  --ok: #9fe07a;
+
+  --font-display: var(--font-archivo), "Archivo", system-ui, sans-serif;
+  --font-mono: var(--font-martian), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-deva: var(--font-noto-deva), "Noto Sans Devanagari", var(--font-display);
+
+  /* type */
+  --t-micro: 0.6875rem; /* 11px mono labels */
+  --t-small: 0.8125rem;
+  --t-body: clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);
+  --t-lead: clamp(1.125rem, 1rem + 0.6vw, 1.4375rem);
+  --t-h3: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+  --t-h2: clamp(2.375rem, 1.4rem + 4.2vw, 4.75rem);
+  --t-display: clamp(2.75rem, 1rem + 7.4vw, 6rem);
+  --track-tight: -0.035em;
+  --track-wide: 0.18em;
+  --track-range: 0.42em; /* range-name tracking for wide caps */
+
+  /* space */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 72px;
+  --s-9: 120px;
+  --s-10: 180px;
+  --gutter: clamp(16px, 4vw, 56px);
+  --max: 1440px;
+  --section-pad: clamp(48px, 7vh, 84px); /* bottom of a section; the next one's edge adds a little more */
+
+  /* shape */
+  --r-1: 2px;
+  --r-2: 6px;
+  --r-3: 14px;
+  --r-pill: 999px;
+  --hair: 1px solid var(--line);
+
+  /* motion: one curve for everything */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+  --dur-1: 0.18s;
+  --dur-2: 0.32s;
+  --dur-3: 0.6s;
+  --dur-4: 0.9s;
+
+  /* depth: offset + soft blur, never a zero-offset halo */
+  --shadow-1: 0 1px 0 rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.7);
+  --shadow-2: 0 2px 0 rgb(0 0 0 / 0.35), 0 24px 60px -24px rgb(0 0 0 / 0.85);
+
+  /* layers */
+  --layer-terrain: 0;
+  --layer-content: 1;
+  --layer-collar: 50;
+  --layer-cursor: 60;
+  --layer-mascot: 70;
+  --layer-drawer: 80;
+  --layer-overlay: 90;
+  --layer-intro: 100;
+  --layer-toast: 110;
+
+  color-scheme: dark;
+  accent-color: var(--fix);
+}
+
+/* ─── base ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--ground);
+  color: var(--ink-2);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-color: var(--z5) var(--z1);
+  scrollbar-width: thin;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--ground);
+  font-family: var(--font-display);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  font-stretch: 100%;
+  font-kerning: normal;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+  caret-color: var(--fix);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: var(--track-tight);
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: var(--z6);
+  transition: text-decoration-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
+}
+
+a:hover {
+  text-decoration-color: var(--fix);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+em {
+  font-style: italic;
+}
+
+/* Cartographic convention: water names (and only water names) in italic blue. Opt in with .hydro. */
+.hydro {
+  color: var(--hydro);
+  font-style: italic;
+  font-weight: 400;
+  font-stretch: 100%;
+}
+
+code,
+kbd,
+samp,
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "zero" 1;
+}
+
+kbd {
+  display: inline-block;
+  padding: 0.05em 0.45em;
+  border: var(--hair);
+  border-bottom-width: 2px;
+  border-radius: var(--r-1);
+  font-size: 0.85em;
+  color: var(--ink);
+  background: var(--sheet);
+}
+
+/* ─── browser surfaces ─── */
+::selection {
+  background: var(--fix);
+  color: var(--fix-ink);
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--fix);
+  outline-offset: 3px;
+  border-radius: var(--r-1);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--z1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--z5);
+  border: 2px solid var(--z1);
+  border-radius: var(--r-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--z6);
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: var(--ink);
+}
+
+::placeholder {
+  color: var(--z7);
+  opacity: 1;
+}
+
+/* ─── utilities ─── */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  left: var(--s-4);
+  top: var(--s-4);
+  z-index: calc(var(--layer-intro) + 5);
+  padding: var(--s-2) var(--s-4);
+  background: var(--fix);
+  color: var(--fix-ink);
+  font-weight: 600;
+  border-radius: var(--r-1);
+  transform: translateY(-200%);
+  transition: transform var(--dur-2) var(--ease);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mute);
+  font-variant-numeric: tabular-nums;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* repeat visitors this session: the server-rendered greeting never paints */
+html[data-greeted] [data-greeting] {
+  display: none !important;
+}
+
+/* lock page scroll under overlays (Lenis is stopped too) */
+html.is-locked,
+html.is-locked body {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Programmatic focus targets (section headings after keyboard travel, <main>):
+   keep the focus there for screen readers without boxing the whole heading. */
+[tabindex="-1"]:focus-visible {
+  outline: none;
+}
+
+/* the 404 sheet never shows the greeting */
+html:has([data-skip-greeting]) [data-greeting] {
+  display: none !important;
+}

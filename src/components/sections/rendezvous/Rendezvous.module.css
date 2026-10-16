@@ -1,0 +1,475 @@
+/* invitation on the left (direct lines under it), the booker on the right; stacked on narrower sheets */
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 52rem);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "invite booking"
+    "contact booking";
+  gap: var(--s-5) clamp(var(--s-6), 3.5vw, var(--s-7));
+  align-items: start;
+}
+
+/* ─── the invitation ─── */
+.invite {
+  grid-area: invite;
+  display: grid;
+  gap: var(--s-4);
+  align-content: start;
+}
+
+.offer {
+  max-width: 34ch;
+  font-size: var(--t-lead);
+  line-height: 1.35;
+  color: var(--ink-2);
+}
+
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  font-size: var(--t-small);
+  color: var(--ink-2);
+}
+
+.steps li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.stepNo {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  font-size: var(--t-micro);
+  font-weight: 650;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── the booker: a framed panel with crop marks and a collar ─── */
+.panel {
+  grid-area: booking;
+  position: relative;
+  background: var(--sheet);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  box-shadow: var(--shadow-1);
+}
+
+.corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 0 solid var(--ink-3);
+  pointer-events: none;
+}
+
+.corner[data-c="tl"] {
+  top: -8px;
+  left: -8px;
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+
+.corner[data-c="tr"] {
+  top: -8px;
+  right: -8px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+
+.corner[data-c="bl"] {
+  bottom: -8px;
+  left: -8px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+
+.corner[data-c="br"] {
+  bottom: -8px;
+  right: -8px;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+.collar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-4);
+  padding: var(--s-2) var(--s-4) var(--s-2) var(--s-5);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--t-micro);
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+
+.collarName {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-small);
+  font-weight: 650;
+  font-stretch: 82%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.collarName svg {
+  color: var(--fix);
+}
+
+.calLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  margin-left: auto;
+  font-size: var(--t-small);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-decoration-color: var(--z6);
+}
+
+.calLink:hover,
+.calLink:focus-visible {
+  color: var(--ink);
+  text-decoration-color: var(--fix);
+}
+
+.stage {
+  position: relative;
+  min-height: 30rem;
+  overflow: hidden;
+}
+
+/* once Cal answers, the frame follows its height; a long phone slot list scrolls inside the frame */
+.panel[data-state="ready"] .stage {
+  min-height: 0;
+  max-height: min(720px, calc(100svh - 140px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.embed {
+  width: 100%;
+  min-height: 420px;
+}
+
+/* skeleton in the shape of the booker: calendar · slots */
+.skeleton {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: var(--s-6);
+  padding: var(--s-7) var(--s-6) var(--s-6);
+  background: var(--sheet);
+  overflow: hidden;
+}
+
+.skRule {
+  display: block;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.skCal,
+.skSlots {
+  display: grid;
+  align-content: start;
+  gap: var(--s-4);
+}
+
+.skDays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.skDays span {
+  aspect-ratio: 1.15;
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+}
+
+.skSlots span {
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+}
+
+.skSweep {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: var(--fix);
+  animation: sweep 2.8s var(--ease-io) infinite alternate;
+}
+
+@keyframes sweep {
+  from {
+    transform: translateY(var(--s-5));
+  }
+  to {
+    transform: translateY(440px);
+  }
+}
+
+.skText {
+  position: absolute;
+  left: var(--s-6);
+  top: var(--s-4);
+  margin: 0;
+  font-size: var(--t-small);
+  font-stretch: 82%;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--s-5);
+  padding: var(--s-6);
+  background: var(--sheet);
+  text-align: center;
+}
+
+.fallback p {
+  max-width: 44ch;
+  color: var(--ink-3);
+}
+
+.fallback strong {
+  display: block;
+  margin-bottom: var(--s-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-size: var(--t-lead);
+}
+
+/* ─── direct lines ─── */
+.contact {
+  grid-area: contact;
+  align-self: start;
+  display: grid;
+  gap: var(--s-3);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+}
+
+.contactLead {
+  font-size: var(--t-small);
+  color: var(--ink-3);
+}
+
+.email {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-3);
+}
+
+.emailLink {
+  font-size: clamp(1.125rem, 0.9rem + 0.8vw, 1.5rem);
+  font-weight: 600;
+  font-stretch: 94%;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--z6);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  overflow-wrap: anywhere;
+}
+
+.emailLink:hover {
+  text-decoration-color: var(--fix);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-stretch: 82%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  transition:
+    border-color var(--dur-2) var(--ease),
+    color var(--dur-2) var(--ease);
+}
+
+.chip:hover {
+  border-color: var(--fix);
+  color: var(--fix-hi);
+}
+
+.chip[data-copied] {
+  border-color: var(--ok);
+  color: var(--ok);
+}
+
+.copyError {
+  font-size: var(--t-small);
+  color: var(--alert);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.linkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 40px;
+  padding: 0 var(--s-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color var(--dur-2) var(--ease);
+}
+
+.linkBtn > svg:first-child {
+  color: var(--ink-3);
+}
+
+.linkBtn:hover,
+.linkBtn:focus-visible {
+  border-color: var(--fix);
+}
+
+.linkMeta {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+.linkArrow {
+  color: var(--ink-3);
+  transition:
+    transform var(--dur-3) var(--ease),
+    color var(--dur-2) var(--ease);
+}
+
+.linkBtn:hover .linkArrow,
+.linkBtn:focus-visible .linkArrow {
+  color: var(--fix);
+  transform: translate(2px, -2px);
+}
+
+/* ─── the line: letters rise like terrain under the pointer ─── */
+.closing {
+  font-size: clamp(2rem, 0.9rem + 1.9vw, 2.625rem);
+  font-weight: 650;
+  font-stretch: 108%;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.closingLines {
+  position: relative;
+  display: block;
+  touch-action: pan-y;
+}
+
+.closingLine {
+  display: block;
+}
+
+.closingLine + .closingLine {
+  padding-left: 0.9em;
+}
+
+.word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.ch {
+  display: inline-block;
+  transform-origin: 50% 100%;
+  transition: color var(--dur-2) var(--ease);
+}
+
+.ch[data-fix] {
+  color: var(--fix);
+}
+
+@media (max-width: 1180px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas:
+      "invite"
+      "booking"
+      "contact";
+  }
+}
+
+@media (max-width: 720px) {
+  .grid {
+    row-gap: var(--s-4);
+  }
+
+  .invite {
+    gap: var(--s-3);
+  }
+
+  .stage {
+    min-height: 26rem;
+  }
+
+  .skeleton {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: var(--s-4);
+  }
+
+  .skSlots {
+    display: none;
+  }
+
+  .collar {
+    padding-inline: var(--s-4) var(--s-3);
+  }
+
+  .skText {
+    left: var(--s-4);
+  }
+
+  .closingLine + .closingLine {
+    padding-left: 0;
+  }
+}

@@ -1,0 +1,109 @@
+.sheet {
+  position: relative;
+  z-index: var(--layer-content);
+  padding-block: var(--s-5) var(--section-pad);
+  scroll-margin-top: 0;
+}
+
+/* the sheet's edge: a hairline ruled every 40px, taller index ticks every 200px. No text. */
+.edge {
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  margin-bottom: clamp(28px, 4.5vh, 52px);
+}
+
+.ticks {
+  display: block;
+  height: 9px;
+  background:
+    linear-gradient(var(--line-strong), var(--line-strong)) left center / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, var(--z6) 0 1px, transparent 1px 200px) left center / 100% 9px no-repeat,
+    repeating-linear-gradient(90deg, var(--z5) 0 1px, transparent 1px 40px) left center / 100% 5px no-repeat;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3) var(--s-6);
+  margin-bottom: clamp(20px, 3.5vh, 40px);
+}
+
+/* Region name: the map's own lettering for an area — wide, tracked caps in paper-white.
+   The plain-words chip flows inline after the last word, so it always sits beside the name
+   (and drops to its own line only when the name fills the measure). */
+.title {
+  --region-size: clamp(1.75rem, 0.9rem + 3.4vw, 3.5rem);
+  max-width: 22ch;
+  font-size: var(--region-size);
+  font-weight: 650;
+  font-stretch: 125%;
+  letter-spacing: 0.14em;
+  line-height: 1.08;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* emphasis inside a region name stays in the name's own voice (hydro is for water only) */
+.region em {
+  font-style: normal;
+  font-weight: inherit;
+  font-stretch: inherit;
+  color: inherit;
+}
+
+/* What the section is, in plain words: a printed tag, not a button (no hover, no press).
+   Raised so its letters centre on the region name's capitals (cap height ≈ 0.72em). */
+.plain {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 var(--s-3);
+  border: 1px solid var(--fix);
+  border-radius: var(--r-1);
+  font-size: clamp(0.8125rem, 0.74rem + 0.3vw, 1rem);
+  font-weight: 650;
+  font-stretch: 100%;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: calc(var(--region-size) * 0.36 - 0.36em);
+  color: var(--fix-hi);
+  background: var(--ground);
+}
+
+.aside {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mute);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bleed {
+  width: 100%;
+}
+
+@media (max-width: 720px) {
+  .sheet {
+    padding-top: var(--s-4);
+  }
+
+  .edge {
+    margin-bottom: var(--s-5);
+  }
+
+  .title {
+    letter-spacing: 0.1em;
+  }
+
+  .plain {
+    min-height: 28px;
+    padding: 0 var(--s-2);
+    letter-spacing: 0.1em;
+  }
+}

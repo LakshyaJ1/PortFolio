@@ -1,0 +1,467 @@
+/* the drawing letters itself only while it is big enough to read; below that it balloons */
+.wrap {
+  container: drawing / inline-size;
+  min-width: 0;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.svg :is(line, polyline, path, rect, circle, ellipse) {
+  vector-effect: non-scaling-stroke;
+}
+
+/* ─── ground ─── */
+.contour path {
+  fill: none;
+  stroke: var(--z4);
+  stroke-width: 1;
+}
+
+.footprint rect {
+  fill: var(--z2);
+  stroke: var(--z5);
+  stroke-width: 1;
+}
+
+/* road: casing, bed, dashed centre line (these scale with the drawing) */
+.svg .roadCase,
+.svg .roadBed,
+.svg .tunnelMask,
+.svg .tunnelEdge,
+.svg .tunnelBed {
+  vector-effect: none;
+}
+
+.roadCase {
+  fill: none;
+  stroke: var(--z6);
+  stroke-width: 32;
+  stroke-linecap: butt;
+}
+
+.roadBed {
+  fill: none;
+  stroke: var(--z3);
+  stroke-width: 29;
+}
+
+.roadLine {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1;
+  stroke-dasharray: 8 7;
+}
+
+/* topographic tunnel convention: the road continues dashed between portals */
+.tunnelMask {
+  fill: none;
+  stroke: var(--sheet);
+  stroke-width: 34;
+}
+
+.tunnelEdge {
+  fill: none;
+  stroke: var(--z6);
+  stroke-width: 31;
+  stroke-dasharray: 5 5;
+}
+
+.tunnelBed {
+  fill: none;
+  stroke: var(--sheet);
+  stroke-width: 28;
+}
+
+.portal {
+  fill: none;
+  stroke: var(--z9);
+  stroke-width: 1.5;
+}
+
+.lab {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  font-stretch: 78%;
+  letter-spacing: 0.1em;
+  fill: var(--ink-3);
+}
+
+/* small map lettering (names, detail titles): Archivo condensed caps, never mono */
+.code {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  font-stretch: 78%;
+  letter-spacing: 0.12em;
+  fill: var(--ink-3);
+}
+
+.signal {
+  stroke: var(--z6);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.blocked {
+  fill: none;
+  stroke: var(--z8);
+  stroke-width: 1.2;
+}
+
+.sat rect {
+  fill: var(--z3);
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+/* GNSS fixes are literal position fixes: survey orange */
+.fixMark circle,
+.fixMark path {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.4;
+}
+
+.ellipse {
+  fill: none;
+  stroke: var(--z8);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.drMark {
+  fill: var(--sheet);
+  stroke: var(--z10);
+  stroke-width: 1.2;
+}
+
+.car rect,
+.car path {
+  fill: var(--z4);
+  stroke: var(--z10);
+  stroke-width: 1.2;
+}
+
+.car path {
+  fill: none;
+  stroke: var(--z8);
+}
+
+.car .wheel {
+  fill: var(--z8);
+  stroke: none;
+}
+
+.car .phone {
+  fill: var(--z10);
+  stroke: none;
+}
+
+.detailRing {
+  fill: none;
+  stroke: var(--z8);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.detailLead {
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+.detailBox {
+  fill: var(--z1);
+  stroke: var(--z6);
+  stroke-width: 1;
+}
+
+.north path {
+  fill: var(--z9);
+  stroke: none;
+}
+
+/* ─── blocks, arrows, flows ─── */
+.block rect {
+  fill: var(--z3);
+  stroke: var(--z7);
+  stroke-width: 1;
+}
+
+.blockLabel {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  font-stretch: 78%;
+  letter-spacing: 0.06em;
+  fill: var(--ink);
+}
+
+.blockSub {
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-stretch: 78%;
+  fill: var(--ink-3);
+}
+
+.arrow line,
+.arrow path {
+  fill: none;
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+.flow {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1;
+}
+
+.card {
+  fill: var(--z2);
+  stroke: var(--z6);
+  stroke-width: 1;
+}
+
+.cardTop > rect:first-child {
+  fill: var(--z3);
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+.frame {
+  fill: var(--z2);
+  stroke: var(--z7);
+  stroke-width: 1;
+}
+
+.frameArt {
+  fill: none;
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+.textLines {
+  fill: none;
+  stroke: var(--z6);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.svg .textLines {
+  vector-effect: none;
+}
+
+.vector rect {
+  fill: var(--z8);
+  stroke: none;
+}
+
+.fuse {
+  fill: var(--z5);
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+.tree line {
+  stroke: var(--z7);
+  stroke-width: 1;
+}
+
+.tree circle,
+.tree rect {
+  fill: var(--z3);
+  stroke: var(--z9);
+  stroke-width: 1;
+}
+
+.tag path {
+  fill: var(--z3);
+  stroke: var(--z10);
+  stroke-width: 1.2;
+}
+
+.tag circle {
+  fill: var(--sheet);
+  stroke: var(--z8);
+}
+
+.bench path {
+  fill: none;
+  stroke: var(--z10);
+  stroke-width: 1.5;
+}
+
+.benchLine {
+  stroke: var(--z6);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.datum line {
+  stroke: var(--z9);
+  stroke-width: 1;
+}
+
+.datum .datumBase {
+  stroke: var(--z7);
+  stroke-dasharray: 6 4;
+}
+
+/* ─── TokenForge ─── */
+.doc path {
+  fill: var(--z2);
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+.doc path + path {
+  fill: none;
+}
+
+.codeBar {
+  fill: var(--z5);
+}
+
+.pad {
+  fill: var(--z3);
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+.padLegs,
+.exhaust {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1;
+}
+
+.coin circle,
+.coin path {
+  fill: none;
+  stroke: var(--z10);
+  stroke-width: 1.2;
+}
+
+.coin circle:first-child {
+  fill: var(--z3);
+}
+
+.coin .coinCore {
+  fill: var(--z10);
+}
+
+.pool {
+  fill: var(--z2);
+  stroke: var(--z8);
+  stroke-width: 1.2;
+}
+
+.poolLevel {
+  fill: none;
+  stroke: var(--z5);
+  stroke-width: 1;
+}
+
+.lock rect,
+.lock path,
+.lock circle {
+  fill: var(--z3);
+  stroke: var(--z10);
+  stroke-width: 1.2;
+}
+
+.lock path {
+  fill: none;
+}
+
+.supplyLocked {
+  fill: var(--z5);
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+.supplyRest {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+/* ─── survey annotations ─── */
+.leader polyline {
+  fill: none;
+  stroke: var(--z9);
+  stroke-width: 1;
+}
+
+.leader circle {
+  fill: var(--z10);
+}
+
+.dim line,
+.dim path {
+  fill: none;
+  stroke: var(--z9);
+  stroke-width: 1;
+}
+
+.dimTick {
+  stroke-width: 1.4;
+}
+
+.noteValue {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 500;
+  fill: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.noteLabel {
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-stretch: 82%;
+  fill: var(--ink-3);
+}
+
+.balloon {
+  display: none;
+}
+
+.balloon circle {
+  fill: var(--sheet);
+  stroke: var(--z10);
+  stroke-width: 1.2;
+}
+
+.balloon text {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 650;
+  fill: var(--ink);
+}
+
+/* too small to letter (phones): the notes step aside (the card prints the figures)
+   and the remaining names grow so they stay legible */
+@container drawing (max-width: 460px) {
+  .noteValue,
+  .noteLabel,
+  .blockSub,
+  .code {
+    display: none;
+  }
+
+  .lab {
+    font-size: 21px;
+  }
+
+  .blockLabel {
+    font-size: 18px;
+  }
+}

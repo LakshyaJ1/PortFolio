@@ -1,0 +1,495 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-overlay);
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--z0) 64%, transparent);
+  transition: opacity var(--dur-3) var(--ease);
+}
+
+.root[data-state="closing"] .scrim {
+  opacity: 0;
+}
+
+/* ─── the panel: a sheet that drops from the top edge ─── */
+.panel {
+  position: absolute;
+  inset: 0 0 auto;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  height: min(60vh, 700px);
+  min-height: min(440px, 100dvh);
+  background: var(--z2);
+  border-bottom: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  line-height: 1.65;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  transition: transform var(--dur-3) var(--ease);
+}
+
+.panel:focus {
+  outline: none;
+}
+
+.root[data-state="closing"] .panel {
+  transform: translateY(-104%);
+  transition-duration: var(--dur-2);
+  transition-timing-function: var(--ease-io);
+}
+
+@starting-style {
+  .root[data-state="open"] .panel {
+    transform: translateY(-104%);
+  }
+  .root[data-state="open"] .scrim {
+    opacity: 0;
+  }
+}
+
+.panel ::selection {
+  background: var(--fix);
+  color: var(--fix-ink);
+}
+
+.panel kbd {
+  font-size: 0.92em;
+  background: var(--z3);
+}
+
+/* ─── title bar ─── */
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-width: 0;
+  padding: var(--s-3) var(--gutter);
+  border-bottom: 1px solid var(--line);
+}
+
+.barIcon {
+  display: grid;
+  color: var(--fix);
+}
+
+.title {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.barMeta {
+  margin-left: auto;
+  overflow: hidden;
+  font-size: var(--t-micro);
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.gridRef {
+  color: var(--fix-hi);
+}
+
+.close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-right: calc(-1 * var(--s-2));
+  color: var(--ink-3);
+  border-radius: var(--r-1);
+  transition: color var(--dur-1) var(--ease), background-color var(--dur-1) var(--ease);
+}
+
+.close:hover {
+  color: var(--ink);
+  background: var(--z4);
+}
+
+/* ─── scrollback ─── */
+.out {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--s-4) var(--gutter) var(--s-3);
+  scrollbar-color: var(--z5) var(--z2);
+  scrollbar-width: thin;
+}
+
+.line {
+  max-width: 108ch;
+  overflow-wrap: anywhere;
+}
+
+.line + .line {
+  margin-top: var(--s-1);
+}
+
+.line[data-kind="input"] {
+  margin-top: var(--s-4);
+  color: var(--ink);
+}
+
+.line[data-kind="input"]:first-child {
+  margin-top: 0;
+}
+
+.line[data-kind="err"] {
+  color: var(--alert);
+}
+
+.line[data-kind="ok"] {
+  color: var(--ok);
+}
+
+.line[data-kind="sys"] {
+  color: var(--ink-3);
+}
+
+.line p + p {
+  margin-top: var(--s-1);
+}
+
+.ps1 {
+  flex: none;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.banner {
+  padding-bottom: var(--s-2);
+}
+
+.starters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24ch), 1fr));
+  gap: var(--s-1) var(--s-5);
+  margin-block: var(--s-2);
+}
+
+.banner strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* a command you can click: an action, so it's survey orange */
+.run {
+  display: inline;
+  padding: 0;
+  font: inherit;
+  color: var(--fix-hi);
+  text-decoration: underline dotted;
+  text-decoration-color: color-mix(in srgb, var(--fix) 60%, transparent);
+  text-underline-offset: 0.25em;
+  white-space: nowrap;
+  border-radius: var(--r-1);
+}
+
+.run:hover {
+  color: var(--ink);
+  text-decoration-style: solid;
+  text-decoration-color: var(--fix);
+}
+
+.ext {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--z6);
+  text-underline-offset: 0.25em;
+}
+
+.ext:hover {
+  text-decoration-color: var(--fix);
+}
+
+.meta {
+  color: var(--ink-3);
+}
+
+.usage {
+  color: var(--ink-3);
+  white-space: pre;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-1) var(--s-4);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.headAside {
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.block {
+  padding-left: var(--s-4);
+  border-left: 1px solid var(--line-strong);
+}
+
+.block + .block {
+  margin-top: var(--s-4);
+}
+
+.bullets {
+  margin-block: var(--s-1);
+}
+
+.bullets li {
+  position: relative;
+  padding-left: 2ch;
+}
+
+.bullets li::before {
+  content: "-";
+  position: absolute;
+  left: 0;
+  color: var(--mute);
+}
+
+.stack {
+  color: var(--ink-3);
+}
+
+.figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s-5);
+  color: var(--ink-3);
+}
+
+.figures strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* key / value tables: one grid so the values align */
+.kv,
+.help,
+.ls {
+  display: grid;
+  grid-template-columns: minmax(9ch, max-content) minmax(0, 1fr);
+  gap: 2px var(--s-5);
+  margin: 0;
+}
+
+.ls {
+  grid-template-columns: 4ch minmax(0, 1fr);
+}
+
+.kvRow {
+  display: contents;
+}
+
+.kv dt,
+.help dt,
+.ls dt {
+  color: var(--ink-3);
+}
+
+.kv dd,
+.help dd,
+.ls dd {
+  margin: 0;
+}
+
+.ls [data-found] dd {
+  color: var(--ink);
+}
+
+.ls [data-found] dt {
+  color: var(--fix-hi);
+}
+
+.history li {
+  white-space: pre;
+}
+
+.cands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s-5);
+}
+
+/* ─── survey (neofetch) ─── */
+.survey {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--s-6);
+  align-items: start;
+  padding-block: var(--s-2);
+}
+
+.art {
+  margin: 0;
+  font: inherit;
+  line-height: 1.35;
+  color: var(--contour-index);
+}
+
+.art .summit {
+  color: var(--fix);
+}
+
+.surveyInfo {
+  display: grid;
+  gap: var(--s-2);
+}
+
+.surveyTitle {
+  color: var(--ink-3);
+}
+
+.surveyTitle strong {
+  color: var(--fix-hi);
+  font-weight: 600;
+}
+
+.swatches {
+  display: flex;
+  margin-top: var(--s-2);
+}
+
+.swatches span {
+  width: 22px;
+  height: 12px;
+}
+
+/* ─── prompt ─── */
+.prompt {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--gutter);
+  border-top: 1px solid var(--line);
+  background: var(--z3);
+  transition: border-color var(--dur-2) var(--ease);
+}
+
+.prompt:focus-within {
+  border-top-color: var(--fix);
+}
+
+.prompt:focus-within .ps1 {
+  color: var(--ink-2);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--s-1) 0;
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  caret-color: var(--fix);
+  font-variant-numeric: tabular-nums;
+}
+
+.input:focus,
+.input:focus-visible {
+  outline: none;
+}
+
+/* ─── bottom edge: quick commands on a ruled sheet edge ─── */
+.edge {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--s-2) var(--s-5);
+  padding: var(--s-2) var(--gutter) 0;
+}
+
+.chips {
+  display: flex;
+  gap: var(--s-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-block: var(--s-1);
+  font-size: var(--t-micro);
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.keys {
+  font-size: var(--t-micro);
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.ticks {
+  grid-column: 1 / -1;
+  height: 9px;
+  margin-inline: calc(-1 * var(--gutter));
+  background:
+    linear-gradient(var(--line-strong), var(--line-strong)) left bottom / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, var(--z6) 0 1px, transparent 1px 200px) left bottom / 100% 9px no-repeat,
+    repeating-linear-gradient(90deg, var(--z5) 0 1px, transparent 1px 40px) left bottom / 100% 5px no-repeat;
+}
+
+@media (max-width: 720px) {
+  .panel {
+    height: var(--vvh, 100dvh);
+    min-height: 0;
+    border-bottom: 0;
+    font-size: 0.75rem;
+  }
+
+  .input {
+    font-size: 16px; /* keeps iOS from zooming the page */
+  }
+
+  .barMeta {
+    display: none;
+  }
+
+  .close {
+    margin-left: auto;
+  }
+
+  .keys {
+    display: none;
+  }
+
+  .edge {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .survey {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-3);
+  }
+
+  .kv,
+  .help {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kv dt,
+  .help dt {
+    margin-top: var(--s-2);
+  }
+}

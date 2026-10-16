@@ -1,0 +1,224 @@
+.root {
+  --box: min(248px, 56vw);
+  --arm: 34px;
+  --inset: 20px;
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--layer-overlay) + 4);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  animation: out var(--dur-2) var(--ease) 1s forwards;
+}
+
+/* survey hairlines through the centre, drawn outward */
+.hair {
+  position: absolute;
+  background: color-mix(in srgb, var(--fix) 55%, transparent);
+}
+
+.hair[data-axis="x"] {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  transform-origin: 50% 50%;
+  animation: drawX var(--dur-4) var(--ease) both;
+}
+
+.hair[data-axis="y"] {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  transform-origin: 50% 50%;
+  animation: drawY var(--dur-4) var(--ease) both;
+}
+
+.reticle {
+  position: relative;
+  width: var(--box);
+  height: var(--box);
+  animation: lock 0.72s var(--ease) both;
+}
+
+.corner {
+  position: absolute;
+  width: var(--arm);
+  height: var(--arm);
+  border: 0 solid var(--fix);
+  animation: snap 0.56s var(--ease) both;
+}
+
+.corner[data-c="tl"] {
+  top: 0;
+  left: 0;
+  border-top-width: 2px;
+  border-left-width: 2px;
+  --dx: calc(-50vw + var(--box) / 2 + var(--inset));
+  --dy: calc(-50vh + var(--box) / 2 + var(--inset));
+}
+
+.corner[data-c="tr"] {
+  top: 0;
+  right: 0;
+  border-top-width: 2px;
+  border-right-width: 2px;
+  --dx: calc(50vw - var(--box) / 2 - var(--inset));
+  --dy: calc(-50vh + var(--box) / 2 + var(--inset));
+}
+
+.corner[data-c="bl"] {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 2px;
+  border-left-width: 2px;
+  --dx: calc(-50vw + var(--box) / 2 + var(--inset));
+  --dy: calc(50vh - var(--box) / 2 - var(--inset));
+}
+
+.corner[data-c="br"] {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+  --dx: calc(50vw - var(--box) / 2 - var(--inset));
+  --dy: calc(50vh - var(--box) / 2 - var(--inset));
+}
+
+.ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 46px;
+  height: 46px;
+  margin: -23px 0 0 -23px;
+  border: 1px solid var(--fix);
+  border-radius: 50%;
+  animation: ring var(--dur-3) var(--ease) 0.42s both;
+}
+
+.dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--fix);
+  border-radius: 50%;
+}
+
+.plate {
+  position: absolute;
+  top: calc(50% + var(--box) / 2 + var(--s-4));
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: var(--s-2) var(--s-4);
+  background: var(--z2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  box-shadow: var(--shadow-1);
+  animation: reveal var(--dur-3) var(--ease) 0.3s both;
+}
+
+.readout {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.deva {
+  font-family: var(--font-deva);
+  font-size: 1.15em;
+  letter-spacing: 0;
+  color: var(--fix-hi);
+}
+
+.dash {
+  color: var(--ink-3);
+}
+
+.sub {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.root[data-calm] .corner,
+.root[data-calm] .reticle,
+.root[data-calm] .ring,
+.root[data-calm] .hair,
+.root[data-calm] .plate {
+  animation: none;
+}
+
+@keyframes snap {
+  from {
+    transform: translate(var(--dx), var(--dy));
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes lock {
+  0%,
+  70% {
+    transform: scale(1.1);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes ring {
+  from {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes drawX {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes drawY {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes reveal {
+  from {
+    clip-path: inset(0 50% 0 50%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes out {
+  to {
+    opacity: 0;
+  }
+}

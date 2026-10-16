@@ -1,0 +1,130 @@
+.stage {
+  display: block;
+  container-type: size;
+}
+
+.layout {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+}
+
+.plot {
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+}
+
+.side {
+  display: grid;
+  align-content: start;
+  gap: var(--s-5);
+  min-height: 0;
+  padding: var(--s-4);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-left: 1px solid var(--line);
+  background: var(--z2);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  scrollbar-color: var(--z5) var(--z2);
+  scrollbar-width: thin;
+}
+
+.sideLabel {
+  margin-bottom: var(--s-2);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.hex {
+  font-size: var(--t-small);
+  line-height: 1.5;
+  color: var(--ink);
+  word-break: break-all;
+}
+
+.zeros {
+  color: var(--fix-hi);
+}
+
+.rest {
+  color: var(--ink-3);
+}
+
+.ledger ol {
+  border-bottom: 1px solid var(--line);
+}
+
+.ledger li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 2px var(--s-3);
+  padding: var(--s-2) 0;
+  border-top: 1px solid var(--line);
+  animation: in var(--dur-3) var(--ease) both;
+}
+
+.height {
+  color: var(--fix-hi);
+}
+
+.nonce {
+  color: var(--ink-2);
+}
+
+.secs {
+  color: var(--ink-3);
+}
+
+.short {
+  grid-column: 2 / -1;
+  color: var(--ink-3);
+}
+
+.empty {
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+
+.walletLine strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.walletNote {
+  margin-top: var(--s-2);
+  font-family: var(--font-display);
+  font-size: var(--t-small);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+.error {
+  color: var(--alert);
+}
+
+@keyframes in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (max-width: 720px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(150px, 1fr) minmax(0, auto);
+  }
+
+  .side {
+    max-height: 46cqh;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    gap: var(--s-4);
+  }
+}

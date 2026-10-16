@@ -1,0 +1,555 @@
+.collar {
+  position: relative;
+  z-index: var(--layer-content);
+  padding-block: var(--s-5) var(--s-6);
+  background: var(--ground);
+}
+
+/* the same ticked edge every section starts with: the footer reads as the last part of the page */
+.edge {
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  margin-bottom: clamp(32px, 5vh, 56px);
+}
+
+.ticks {
+  display: block;
+  height: 9px;
+  background:
+    linear-gradient(var(--line-strong), var(--line-strong)) left center / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, var(--z6) 0 1px, transparent 1px 200px) left center / 100% 9px no-repeat,
+    repeating-linear-gradient(90deg, var(--z5) 0 1px, transparent 1px 40px) left center / 100% 5px no-repeat;
+}
+
+/* ─── top: name, offer, the two actions; the north arrow on the right ─── */
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "name north"
+    "offer north"
+    "ctas north";
+  align-items: start;
+  gap: var(--s-4) var(--s-6);
+  padding-bottom: var(--s-7);
+  border-bottom: var(--hair);
+}
+
+.name {
+  grid-area: name;
+  font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.5rem);
+  font-weight: 650;
+  font-stretch: 125%;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.offer {
+  grid-area: offer;
+  max-width: 42ch;
+  font-size: var(--t-lead);
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+
+.ctas {
+  grid-area: ctas;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-2);
+}
+
+.north {
+  grid-area: north;
+  align-self: center;
+}
+
+.northBtn {
+  display: block;
+  padding: var(--s-2);
+  border-radius: var(--r-2);
+  color: var(--ink-2);
+  transition: color var(--dur-2) var(--ease);
+}
+
+.northBtn svg {
+  width: 104px;
+  height: 125px;
+}
+
+.northBtn:hover {
+  color: var(--ink);
+}
+
+.northN {
+  fill: currentColor;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 650;
+  font-stretch: 112%;
+}
+
+.roseRing,
+.roseTicks {
+  fill: none;
+  stroke: var(--z6);
+  stroke-width: 1;
+}
+
+.needleInk {
+  fill: currentColor;
+}
+
+.needleOpen,
+.needleTail {
+  fill: var(--ground);
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+}
+
+/* ─── three columns: contact, sections, this site ─── */
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: var(--s-6) var(--s-7);
+  padding-block: var(--s-7);
+  border-bottom: var(--hair);
+}
+
+.col {
+  min-width: 0;
+}
+
+.h {
+  margin-bottom: var(--s-4);
+  font-size: var(--t-small);
+  font-weight: 650;
+  font-stretch: 100%;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.dim {
+  font-size: var(--t-small);
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+/* ─── contact ─── */
+.contact {
+  display: grid;
+  border-top: var(--hair);
+}
+
+.contact > li {
+  border-bottom: var(--hair);
+}
+
+.emailRow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.contactLink {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--s-3);
+  min-width: 0;
+  min-height: 54px;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.contactText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contactIcon {
+  flex: none;
+  color: var(--ink-3);
+  transition: color var(--dur-2) var(--ease);
+}
+
+.contactGo {
+  flex: none;
+  margin-left: auto;
+  color: var(--z6);
+  transition:
+    color var(--dur-2) var(--ease),
+    transform var(--dur-3) var(--ease);
+}
+
+.contactLink:hover .contactIcon {
+  color: var(--ink);
+}
+
+.contactLink:hover .contactGo {
+  color: var(--fix);
+  transform: translate(2px, -1px);
+}
+
+.copy {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 var(--s-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  font-size: var(--t-small);
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink-2);
+  transition:
+    border-color var(--dur-2) var(--ease),
+    color var(--dur-2) var(--ease);
+}
+
+.copy:hover {
+  border-color: var(--fix);
+  color: var(--fix-hi);
+}
+
+.copy[data-state="copied"] {
+  border-color: var(--ok);
+  color: var(--ok);
+}
+
+.copy[data-state="failed"] {
+  border-color: var(--alert);
+  color: var(--alert);
+}
+
+/* ─── sections ─── */
+.links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--s-5);
+  border-top: var(--hair);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  border-bottom: var(--hair);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.link:hover {
+  color: var(--fix-hi);
+}
+
+/* ─── this site: easter eggs, settings, terminal ─── */
+.eggs {
+  display: grid;
+  gap: var(--s-3);
+  width: 100%;
+  padding: var(--s-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-2);
+  text-align: left;
+  background: var(--z2);
+  transition: border-color var(--dur-2) var(--ease);
+}
+
+.eggs:hover {
+  border-color: var(--fix);
+}
+
+.eggLine {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.eggLabel {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.eggCount {
+  font-size: 1.625rem;
+  font-weight: 650;
+  font-stretch: 110%;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--fix-hi);
+}
+
+.tally {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.found {
+  color: var(--fix);
+}
+
+.unfound {
+  color: var(--z6);
+}
+
+.openLog {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-decoration: underline;
+  text-decoration-color: var(--z6);
+  text-underline-offset: 0.3em;
+  transition:
+    color var(--dur-2) var(--ease),
+    text-decoration-color var(--dur-2) var(--ease);
+}
+
+.openLog svg {
+  transition: transform var(--dur-3) var(--ease);
+}
+
+.eggs:hover .openLog {
+  color: var(--ink);
+  text-decoration-color: var(--fix);
+}
+
+.eggs:hover .openLog svg {
+  transform: translateX(3px);
+}
+
+.toggles {
+  display: grid;
+  margin-top: var(--s-4);
+}
+
+.toggle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 3ch;
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  min-height: 52px;
+  padding: var(--s-2) 0;
+  border-bottom: var(--hair);
+  text-align: left;
+}
+
+.toggles .toggle:first-child {
+  border-top: var(--hair);
+}
+
+.toggleText {
+  display: grid;
+  gap: 2px;
+}
+
+.toggleLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.toggleNote {
+  font-size: var(--t-small);
+  line-height: 1.35;
+  color: var(--ink-3);
+}
+
+.switch {
+  position: relative;
+  width: 34px;
+  height: 18px;
+  border: 1px solid var(--z6);
+  border-radius: var(--r-1);
+  transition: border-color var(--dur-2) var(--ease);
+}
+
+.thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 1px;
+  background: var(--z7);
+  transition:
+    transform var(--dur-3) var(--ease),
+    background-color var(--dur-2) var(--ease);
+}
+
+.state {
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.toggle[aria-checked="true"] .switch {
+  border-color: var(--fix);
+}
+
+.toggle[aria-checked="true"] .thumb {
+  background: var(--fix);
+  transform: translateX(16px);
+}
+
+.toggle[aria-checked="true"] .state {
+  color: var(--fix-hi);
+}
+
+.toggle:hover:not(:disabled) .switch {
+  border-color: var(--z8);
+}
+
+.toggle[aria-checked="true"]:hover:not(:disabled) .switch {
+  border-color: var(--fix-hi);
+}
+
+.toggle:disabled {
+  cursor: not-allowed;
+}
+
+.toggle:disabled .toggleLabel,
+.toggle:disabled .switch,
+.toggle:disabled .state {
+  opacity: 0.5;
+}
+
+/* touch-friendly door to the terminal (the ` key does the same) */
+.terminalBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 44px;
+  margin-top: var(--s-2);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-decoration-color: var(--z6);
+  text-underline-offset: 0.3em;
+}
+
+.terminalBtn:hover {
+  color: var(--ink);
+  text-decoration-color: var(--fix);
+}
+
+/* ─── base line: Delhi time, the small print, back to top ─── */
+.base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3) var(--s-6);
+  padding-top: var(--s-5);
+}
+
+.time {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px var(--s-3);
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+
+.clock {
+  margin-left: 4px;
+  font-size: 1.0625rem;
+  color: var(--ink);
+}
+
+.relation {
+  font-size: var(--t-small);
+  color: var(--ink-3);
+}
+
+.relation :global(.mono) {
+  font-size: var(--t-micro);
+  color: var(--ink-2);
+}
+
+.copyright {
+  flex: 1 1 30ch;
+  font-size: var(--t-small);
+  color: var(--ink-3);
+}
+
+/* ─── responsive ─── */
+@media (max-width: 1023px) {
+  .cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cols > :last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .top {
+    grid-template-areas:
+      "name north"
+      "offer offer"
+      "ctas ctas";
+    gap: var(--s-3) var(--s-4);
+    padding-bottom: var(--s-6);
+  }
+
+  .name {
+    align-self: center;
+    letter-spacing: 0.08em;
+  }
+
+  .northBtn {
+    padding: var(--s-1);
+  }
+
+  .northBtn svg {
+    width: 64px;
+    height: 77px;
+  }
+
+  .ctas > * {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: var(--s-6);
+  }
+
+  .base {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* in a column the 30ch basis would become a height */
+  .copyright {
+    flex: none;
+  }
+}

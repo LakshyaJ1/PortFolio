@@ -1,0 +1,55 @@
+.page {
+  display: grid;
+  align-content: center;
+  gap: var(--s-5);
+  min-height: 100svh;
+  padding: var(--s-8) var(--gutter);
+  max-width: 920px;
+  margin-inline: auto;
+  background:
+    repeating-radial-gradient(ellipse at 70% 40%, transparent 0 38px, var(--z4) 38px 39px) center / cover no-repeat,
+    var(--ground);
+}
+
+.title {
+  font-size: var(--t-display);
+  font-stretch: 112%;
+}
+
+.body {
+  max-width: 60ch;
+  color: var(--ink-3);
+  font-size: var(--t-lead);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  padding-inline: var(--s-5);
+  border-radius: var(--r-1);
+  font-weight: 600;
+  font-stretch: 112%;
+  text-decoration: none;
+}
+
+.primary {
+  background: var(--fix);
+  color: var(--fix-ink);
+}
+
+.secondary {
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+
+.secondary:hover {
+  border-color: var(--fix);
+}

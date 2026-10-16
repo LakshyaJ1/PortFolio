@@ -1,0 +1,91 @@
+{
+  "version": 2,
+  "format": "stacked-alpha",
+  "width": 576,
+  "height": 1024,
+  "fps": 24,
+  "clips": {
+    "wave": {
+      "src": "/hero/wave.mp4",
+      "duration": 3.344,
+      "hasAudio": false
+    },
+    "intro": {
+      "src": "/hero/intro.mp4",
+      "duration": 8.0,
+      "hasAudio": true,
+      "speech": {
+        "start": 1.1,
+        "end": 6.82
+      },
+      "captions": [
+        {
+          "start": 1.1,
+          "end": 2.44,
+          "text": "Hey, I'm Lakshya Jain \u2014"
+        },
+        {
+          "start": 2.44,
+          "end": 4.66,
+          "text": "an AI engineer and software engineer."
+        },
+        {
+          "start": 4.66,
+          "end": 6.156,
+          "text": "I build AI agents and ship them"
+        },
+        {
+          "start": 6.156,
+          "end": 6.82,
+          "text": "to production."
+        }
+      ],
+      "voice": "generated"
+    },
+    "offer": {
+      "src": "/hero/offer.mp4",
+      "duration": 8.0,
+      "hasAudio": true,
+      "speech": {
+        "start": 0.46,
+        "end": 7.52
+      },
+      "captions": [
+        {
+          "start": 0.46,
+          "end": 3.42,
+          "text": "I've shipped LLM platforms and on-device models."
+        },
+        {
+          "start": 3.42,
+          "end": 4.321,
+          "text": "Open to internships,"
+        },
+        {
+          "start": 4.321,
+          "end": 6.6,
+          "text": "full-time roles and client work \u2014"
+        },
+        {
+          "start": 6.6,
+          "end": 7.52,
+          "text": "my r\u00e9sum\u00e9's right here."
+        }
+      ],
+      "voice": "generated"
+    },
+    "idle": {
+      "src": "/hero/idle.mp4",
+      "duration": 8.0,
+      "hasAudio": false,
+      "loop": true
+    }
+  },
+  "sequence": [
+    "wave",
+    "intro",
+    "offer"
+  ],
+  "poster": "/hero/poster.png",
+  "bust": "/hero/portrait-bust.webp"
+}

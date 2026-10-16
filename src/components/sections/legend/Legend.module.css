@@ -1,0 +1,585 @@
+.stack {
+  --strip: 18px;
+  position: relative;
+}
+
+/* ─── how to read it: one line above the cross-section ─── */
+.key {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-1) var(--s-5);
+  margin-bottom: var(--s-3);
+  font-size: var(--t-small);
+  color: var(--mute);
+}
+
+.keyHint {
+  color: var(--ink-2);
+}
+
+.keyCount {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── the cross-section: layers stacked like strata, keyed by a stratigraphic column on the left ─── */
+.column {
+  position: relative;
+  background: var(--sheet);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+}
+
+.layer {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--strip) minmax(8.5rem, 10.5rem) minmax(0, 1fr);
+  column-gap: var(--s-5);
+  align-items: center;
+  padding: var(--s-3) var(--s-3) var(--s-3) 0;
+}
+
+/* the contour between two layers */
+.bound {
+  position: absolute;
+  top: -6px;
+  left: var(--strip);
+  width: calc(100% - var(--strip));
+  height: 12px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.bound path {
+  fill: none;
+  stroke: var(--z6);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* the column key: each layer's fill, the way a geologic column draws it */
+.strip {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--strip);
+  border-right: 1px solid var(--line-strong);
+}
+
+.layer + .layer .strip {
+  border-top: 1px solid var(--line-strong);
+}
+
+.strip[data-p="lam"] {
+  background: repeating-linear-gradient(180deg, var(--z6) 0 1px, transparent 1px 4px);
+}
+
+.strip[data-p="hatch"] {
+  background: repeating-linear-gradient(-45deg, var(--z6) 0 1px, transparent 1px 5px);
+}
+
+.strip[data-p="stip"] {
+  background: radial-gradient(circle, var(--z6) 0 0.9px, transparent 1.2px) 0 0 / 5px 5px;
+}
+
+.strip[data-p="brick"] {
+  background:
+    repeating-linear-gradient(45deg, var(--z5) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(-45deg, var(--z6) 0 1px, transparent 1px 6px);
+}
+
+.layerHead {
+  grid-column: 2;
+  display: grid;
+  gap: 2px;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.layerName {
+  font-size: 0.9375rem;
+  font-weight: 650;
+  font-stretch: 100%;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.layerCount {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+
+.layerCount::after {
+  content: " tools";
+}
+
+.layer[data-chips] .layerCount::after {
+  content: " habits";
+}
+
+/* ─── tools: a mark over a name; the small number is how many places on the page use it ─── */
+/* nine columns on wide sheets, so every layer lines up under the one above */
+.tools {
+  grid-column: 3;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.toolCell {
+  display: flex;
+}
+
+.tool {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+  width: 100%;
+  padding: var(--s-3) var(--s-1) var(--s-2);
+  border: 1px solid transparent;
+  border-radius: var(--r-1);
+  color: var(--ink-2);
+  text-align: center;
+  transition:
+    background-color var(--dur-1) var(--ease),
+    border-color var(--dur-1) var(--ease),
+    color var(--dur-1) var(--ease);
+}
+
+.toolMark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  color: var(--ink-2);
+  transition:
+    color var(--dur-1) var(--ease),
+    transform var(--dur-2) var(--ease);
+}
+
+.toolMark svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* filled brand marks run to the box edge; pull them in to sit level with the stroked pictograms */
+.toolMark svg[data-brand] {
+  transform: scale(0.86);
+}
+
+.toolName {
+  font-size: 0.8125rem;
+  font-weight: 550;
+  font-stretch: 88%;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.toolCount,
+.keyDemo {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  line-height: 1;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.toolCount {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.tool:hover,
+.tool[data-active] {
+  background: var(--sheet-2);
+  color: var(--ink);
+}
+
+.tool:hover .toolMark,
+.tool[data-active] .toolMark {
+  color: var(--ink);
+  transform: translateY(-2px);
+}
+
+.tool[aria-expanded="true"] {
+  border-color: var(--fix);
+}
+
+.tool[aria-expanded="true"] .toolMark,
+.tool[data-active] .toolMark {
+  color: var(--fix);
+}
+
+.tool[aria-expanded="true"] .toolCount,
+.tool[data-active] .toolCount {
+  border-color: var(--fix);
+  color: var(--fix-hi);
+}
+
+.tool:focus-visible {
+  outline-offset: -2px;
+}
+
+/* ways of working: plain chips, no marks, at every width */
+.layer[data-chips] .tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.layer[data-chips] .tool {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  width: auto;
+  min-height: 34px;
+  padding: 4px var(--s-3);
+  border-color: var(--line);
+  text-align: left;
+}
+
+.layer[data-chips] .toolCount {
+  position: static;
+}
+
+.layer[data-chips] .tool[aria-expanded="true"] {
+  border-color: var(--fix);
+}
+
+/* ─── evidence: a card by the tool on wide sheets, a drawer inside the layer on phones ─── */
+.card {
+  position: absolute;
+  z-index: 3;
+  width: min(23rem, 100%);
+  background: var(--sheet-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  box-shadow: var(--shadow-2);
+  transition:
+    left var(--dur-1) var(--ease),
+    top var(--dur-1) var(--ease);
+  animation: cardIn var(--dur-2) var(--ease);
+}
+
+.cardBody {
+  padding: var(--s-4) var(--s-4) var(--s-2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+/* the notch points back at the tool */
+.card::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: var(--notch, 50%);
+  width: 11px;
+  height: 11px;
+  background: var(--sheet-2);
+  border-top: 1px solid var(--line-strong);
+  border-left: 1px solid var(--line-strong);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.card[data-place="above"]::before {
+  top: auto;
+  bottom: -6px;
+  border: 0;
+  border-right: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+.drawer {
+  grid-column: 2 / -1;
+  margin-top: var(--s-3);
+  padding: var(--s-4) var(--s-4) var(--s-2);
+  background: var(--ground);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+}
+
+.evHead {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-bottom: var(--s-2);
+}
+
+.evMark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  color: var(--fix);
+}
+
+.evMark svg[data-brand] {
+  transform: scale(0.86);
+}
+
+.evTitle {
+  min-width: 0;
+  flex: 1;
+}
+
+.evGroup {
+  font-size: var(--t-micro);
+  font-weight: 600;
+  font-stretch: 82%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.evName {
+  font-size: 1.375rem;
+  font-weight: 650;
+  font-stretch: 100%;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.evClose {
+  display: grid;
+  place-items: center;
+  flex: none;
+  align-self: start;
+  width: 32px;
+  height: 32px;
+  margin: -6px -8px 0 0;
+  border-radius: var(--r-1);
+  color: var(--ink-3);
+  transition: color var(--dur-1) var(--ease);
+}
+
+.evClose:hover {
+  color: var(--ink);
+}
+
+.evCount {
+  margin-bottom: var(--s-1);
+  font-size: var(--t-small);
+  color: var(--ink-3);
+}
+
+.evCount strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.evList {
+  border-top: 1px solid var(--line);
+}
+
+.evList li + li {
+  border-top: 1px solid var(--line);
+}
+
+.evItem {
+  display: grid;
+  gap: 2px;
+  padding: var(--s-2) 0;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+/* kind · place · role on one line; the résumé line under it */
+.evWhere {
+  overflow: hidden;
+  font-size: var(--t-small);
+  line-height: 1.35;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.evKind {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 2px;
+  font-size: 0.625rem;
+  font-weight: 650;
+  font-stretch: 82%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  vertical-align: 0.1em;
+  color: var(--ink-3);
+}
+
+.hatchMark {
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--z6);
+  background: repeating-linear-gradient(-45deg, var(--z6) 0 1px, transparent 1px 3px);
+}
+
+.evWhere strong {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color var(--dur-2) var(--ease);
+}
+
+.evDetail {
+  color: var(--ink-3);
+}
+
+.evItem:hover .evWhere strong,
+.evItem:focus-visible .evWhere strong {
+  text-decoration-color: var(--fix);
+}
+
+.evSnippet {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+
+.evSnippet mark {
+  background: none;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--fix);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.evNone {
+  padding-bottom: var(--s-2);
+  font-size: var(--t-small);
+  color: var(--ink-3);
+}
+
+.evNone strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ─── narrower sheets: the layer name sits over its tools ─── */
+@media (max-width: 1100px) {
+  .layer {
+    grid-template-columns: var(--strip) minmax(0, 1fr);
+    column-gap: var(--s-4);
+    row-gap: var(--s-2);
+    align-items: start;
+  }
+
+  .layerHead {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-3);
+  }
+
+  .tools {
+    grid-column: 2;
+    grid-template-columns: repeat(auto-fill, minmax(6.25rem, 1fr));
+  }
+}
+
+/* ─── phones: tools become chips (mark beside name), tapped open into a drawer ─── */
+@media (max-width: 720px) {
+  .stack {
+    --strip: 10px;
+  }
+
+  .key {
+    margin-bottom: var(--s-2);
+  }
+
+  .keyCount {
+    font-size: var(--t-micro);
+  }
+
+  .layer {
+    column-gap: var(--s-3);
+    padding-right: var(--s-2);
+  }
+
+  .layerName {
+    font-size: 0.8125rem;
+  }
+
+  .tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tool {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    width: auto;
+    min-height: 40px;
+    padding: 4px var(--s-2) 4px 6px;
+    border-color: var(--line);
+    text-align: left;
+  }
+
+  .toolMark {
+    width: 22px;
+    height: 22px;
+  }
+
+  .tool:hover .toolMark,
+  .tool[data-active] .toolMark {
+    transform: none;
+  }
+
+  .toolName {
+    font-size: 0.8125rem;
+  }
+
+  .toolCount {
+    position: static;
+  }
+
+  .drawer {
+    grid-column: 2;
+  }
+}
+
+@media (pointer: coarse) {
+  .tool,
+  .layer[data-chips] .tool {
+    min-height: 44px;
+  }
+}

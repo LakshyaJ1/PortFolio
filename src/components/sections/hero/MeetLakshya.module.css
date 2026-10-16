@@ -1,0 +1,124 @@
+/* "Meet Lakshya": his face in a live orange ring, then what tapping does. Sits under the name. */
+.meet {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: 6px var(--s-5) 6px 6px;
+  border: 1px solid color-mix(in srgb, var(--fix) 55%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ground) 82%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--ink);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-2) var(--ease),
+    background-color var(--dur-2) var(--ease),
+    transform var(--dur-2) var(--ease);
+}
+
+.meet:hover {
+  border-color: var(--fix);
+  background: color-mix(in srgb, var(--fix) 12%, var(--ground));
+  transform: translateY(-1px);
+}
+
+.meet:focus-visible {
+  outline: 2px solid var(--fix);
+  outline-offset: 3px;
+}
+
+.face {
+  position: relative;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--sheet);
+  color: var(--fix);
+}
+
+.photo {
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background-color: var(--z3);
+  background-position: 50% 18%;
+  background-size: cover;
+}
+
+/* a survey ping: the ring breathes out, like the station on his intro stage */
+.ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--fix);
+  border-radius: 50%;
+}
+
+.ring::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 1px solid var(--fix);
+  border-radius: 50%;
+  animation: ping 2.4s var(--ease) infinite;
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  70%,
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+.play {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--fix);
+  color: var(--fix-ink);
+  box-shadow: 0 0 0 2px var(--ground);
+}
+
+.play svg {
+  fill: currentColor;
+  transform: translateX(1px);
+}
+
+.text {
+  display: grid;
+  gap: 2px;
+  line-height: 1.15;
+}
+
+.text strong {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+}
+
+.text small {
+  font-size: var(--t-small);
+  color: var(--mute);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring::after {
+    animation: none;
+    opacity: 0;
+  }
+}

@@ -1,0 +1,201 @@
+/* An inset map on the sheet: hairline frame, ticked edge rule with the grid ref. */
+.card {
+  display: grid;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4) var(--s-4);
+  background: var(--ground);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  animation: inset var(--dur-3) var(--ease) backwards;
+}
+
+.edge {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.ticks {
+  flex: 1;
+  min-width: 24px;
+  height: 9px;
+  background:
+    linear-gradient(var(--line-strong), var(--line-strong)) left center / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, var(--z6) 0 1px, transparent 1px 80px) left center / 100% 9px no-repeat,
+    repeating-linear-gradient(90deg, var(--z5) 0 1px, transparent 1px 16px) left center / 100% 5px no-repeat;
+}
+
+.head {
+  display: grid;
+  gap: var(--s-1);
+  justify-items: start;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 650;
+  font-stretch: 106%;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.sub {
+  font-size: var(--t-small);
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+
+.tag {
+  font-size: var(--t-micro);
+  font-weight: 600;
+  font-stretch: 88%;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.meta {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.6;
+}
+
+.restricted {
+  margin-top: var(--s-1);
+  padding: 2px var(--s-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  /* hatching: the map convention for a restricted area */
+  background: repeating-linear-gradient(135deg, var(--z5) 0 1px, var(--z1) 1px 6px);
+}
+
+.points {
+  display: grid;
+  gap: var(--s-2);
+  font-size: var(--t-small);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.points li {
+  position: relative;
+  padding-left: var(--s-4);
+}
+
+/* a spot height: small hollow ring */
+.points li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--z7);
+  border-radius: 50%;
+}
+
+.figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3) var(--s-5);
+  margin: 0;
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+}
+
+.fig {
+  display: grid;
+  gap: 2px;
+}
+
+.figValue {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.figLabel {
+  order: 2;
+  font-size: var(--t-micro);
+  font-stretch: 88%;
+  color: var(--ink-3);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-4);
+  padding-top: var(--s-1);
+}
+
+.go {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 36px;
+  padding: 0 var(--s-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  font-size: var(--t-small);
+  font-weight: 600;
+  font-stretch: 104%;
+  color: var(--ink);
+  transition: border-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
+}
+
+.go svg {
+  color: var(--fix);
+  transition: transform var(--dur-3) var(--ease);
+}
+
+.go:hover,
+.go:focus-visible {
+  border-color: var(--fix);
+  color: var(--fix-hi);
+}
+
+.go:hover svg {
+  transform: translateX(3px);
+}
+
+.ext {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  min-height: 36px;
+  font-size: var(--t-small);
+  color: var(--ink-3);
+}
+
+.ext:hover {
+  color: var(--ink);
+}
+
+@keyframes inset {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}

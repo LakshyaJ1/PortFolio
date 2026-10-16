@@ -1,0 +1,2 @@
+Hey, I'm Lakshya Jain — an AI engineer and software engineer. I build AI agents and ship them to production.
+I've shipped LLM platforms and on-device models. Open to internships, full-time roles and client work — my résumé's right here.

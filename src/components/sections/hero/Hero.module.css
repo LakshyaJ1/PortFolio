@@ -1,0 +1,853 @@
+/* A1 · the first viewport: a loss landscape surveyed at night. */
+
+.hero {
+  position: relative;
+  height: 100svh;
+  min-height: 640px;
+  overflow: clip;
+  isolation: isolate;
+  background: var(--ground);
+  /* vertical page scroll always wins on touch; holds only begin when the finger stays put */
+  touch-action: pan-y;
+}
+
+/* ── terrain layers ── */
+
+.terrain {
+  position: absolute;
+  inset: 0;
+  z-index: var(--layer-terrain);
+  -webkit-mask-image: linear-gradient(to bottom, black 0, black 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0, black 80%, transparent 100%);
+  transition: opacity var(--dur-4) var(--ease);
+}
+
+.terrain[data-mode="2d"][data-ready="false"] {
+  opacity: 0;
+}
+
+.gl,
+.svgWrap {
+  position: absolute;
+  inset: 0;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+.surface {
+  position: absolute;
+  inset: 0;
+  z-index: var(--layer-terrain);
+  cursor: crosshair;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.surface:focus-visible {
+  outline: 1px solid var(--fix);
+  outline-offset: -14px;
+  border-radius: 0;
+}
+
+/* ── content over the terrain ── */
+
+.content {
+  position: relative;
+  z-index: var(--layer-content);
+  display: grid;
+  /* the text column on the left; the basin, its note and the readout on the right */
+  grid-template-columns: minmax(0, 46rem) minmax(0, 1fr);
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  column-gap: var(--s-7);
+  height: 100%;
+  /* 56px clear for the collar on top, 72px for the traverse rail on the left */
+  padding-top: calc(56px + clamp(18px, 5vh, 60px));
+  padding-bottom: clamp(20px, 4.4vh, 44px);
+  padding-left: max(calc(72px + clamp(20px, 2.6vw, 40px)), calc((100% - var(--max)) / 2 + var(--gutter)));
+  padding-right: max(var(--gutter), calc((100% - var(--max)) / 2 + var(--gutter)));
+  pointer-events: none;
+}
+
+.content a,
+.content button {
+  pointer-events: auto;
+}
+
+/* the range name */
+.range {
+  position: relative;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  justify-self: start;
+  max-width: 100%;
+}
+
+.name {
+  margin: 0;
+  /* wide caps, tracked like a mountain-range label; sized so one line always fits, and
+     capped by the height so short laptops keep room for everything beneath it */
+  font-size: min(var(--t-display), calc((100vw - 72px - 2 * var(--gutter)) / 13.4), 11.2vh);
+  font-weight: 540;
+  font-stretch: 125%;
+  line-height: 0.92;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+.nameLine {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  column-gap: 0.62em;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.word {
+  display: inline-flex;
+}
+
+.letter {
+  display: inline-block;
+  letter-spacing: var(--track-range);
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.word > .letter:last-child {
+  margin-right: calc(-1 * var(--track-range));
+}
+
+.glyph {
+  display: inline-block;
+  transition: transform var(--dur-3) var(--ease);
+}
+
+/* hover: the letter lifts a hair and briefly takes the survey ink */
+.letter:hover .glyph {
+  transform: translateY(-0.075em);
+  animation: ink 1.25s var(--ease) both;
+}
+
+@keyframes ink {
+  0% {
+    color: var(--ink);
+  }
+  14% {
+    color: var(--fix);
+  }
+  100% {
+    color: var(--ink);
+  }
+}
+
+/* sheet annotation under the range: say hi, and where it is surveyed from */
+.coords {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+  margin: 0;
+  font-size: var(--t-micro);
+  color: var(--ink-3);
+  white-space: nowrap;
+  pointer-events: auto;
+}
+
+.where {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.where svg {
+  color: var(--fix);
+  flex: none;
+}
+
+.where :global(.mono) {
+  letter-spacing: 0.04em;
+}
+
+.place {
+  font-stretch: 82%;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+/* ── the lead: roles, offer, availability, actions ── */
+
+.lead {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  margin-top: clamp(26px, 5.4vh, 56px);
+}
+
+.offer {
+  max-width: 40ch;
+  margin-top: var(--s-4);
+  font-size: var(--t-lead);
+  font-weight: 450;
+  line-height: 1.42;
+  color: var(--ink-2);
+  pointer-events: auto;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: var(--s-4);
+  padding: 6px 14px 6px 11px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--sheet);
+  font-size: 0.875rem;
+  font-weight: 560;
+  font-stretch: 92%;
+  line-height: 1.3;
+  color: var(--ink);
+  pointer-events: auto;
+}
+
+/* availability: a live fix, with a ring that keeps going out like a survey ping */
+.statusDot {
+  position: relative;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fix);
+}
+
+.statusDot::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1.5px solid var(--fix);
+  border-radius: 50%;
+  animation: ping 2.4s var(--ease) infinite;
+}
+
+@keyframes ping {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3) var(--s-4);
+  margin-top: clamp(18px, 3.2vh, 30px);
+}
+
+.ctas .projects {
+  padding-inline: var(--s-2);
+}
+
+/* ── the terminal ── */
+
+.termSlot {
+  grid-column: 1;
+  grid-row: 3;
+  justify-self: start;
+  width: min(100%, 31rem);
+  margin-top: clamp(18px, 3.4vh, 34px);
+}
+
+/* ── field note: the terrain's call to action, pointing at the basin ── */
+
+.field {
+  display: contents;
+}
+
+.note {
+  position: absolute;
+  /* the arrow's tip lands just above-right of the basin the renderers framed at (--fx, --fy) */
+  left: calc(var(--fx, 0.66) * 100% + 58px);
+  top: calc(var(--fy, 0.6) * 100% - 176px);
+  display: block;
+  width: max-content;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-2);
+  text-align: left;
+  cursor: pointer;
+  transform: rotate(-2.5deg);
+  transform-origin: 0 0;
+  pointer-events: auto;
+}
+
+.noteText {
+  display: grid;
+  gap: 2px;
+  font-family: var(--font-kalam), cursive;
+  line-height: 1.2;
+}
+
+.noteLead {
+  font-size: 1.375rem;
+  white-space: nowrap;
+  color: var(--ink);
+  transition: color var(--dur-2) var(--ease);
+}
+
+.noteSub {
+  font-size: 1.0625rem;
+  color: var(--ink-3);
+}
+
+.note:hover .noteLead,
+.note:focus-visible .noteLead {
+  color: var(--fix-hi);
+}
+
+.coarse {
+  display: none;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .fine {
+    display: none;
+  }
+
+  .coarse {
+    display: inline;
+  }
+}
+
+.noteArrow {
+  position: absolute;
+  left: -66px;
+  top: calc(100% - 6px);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.noteArrow path {
+  stroke: var(--ink-3);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke var(--dur-2) var(--ease);
+}
+
+.note:hover .noteArrow path,
+.note:focus-visible .noteArrow path {
+  stroke: var(--fix);
+}
+
+.noteArrow path[data-note-arrow] {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+/* ── the dock: the readout, bottom right ── */
+
+.dock {
+  grid-column: 2;
+  grid-row: 5;
+  justify-self: end;
+  align-self: end;
+}
+
+.dockInner {
+  display: grid;
+  justify-items: end;
+}
+
+/* ── instrument strip ── */
+
+.hud {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "zero" 1;
+  color: var(--ink-2);
+  pointer-events: none;
+}
+
+.hudRule {
+  display: block;
+  height: 7px;
+  background:
+    linear-gradient(var(--line-strong), var(--line-strong)) left top / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, var(--z6) 0 1px, transparent 1px 64px) left top / 100% 7px no-repeat,
+    repeating-linear-gradient(90deg, var(--z5) 0 1px, transparent 1px 8px) left top / 100% 4px no-repeat;
+}
+
+.hudGrid {
+  display: grid;
+  grid-template-columns: auto auto;
+  margin: 0;
+}
+
+.hudCell {
+  display: grid;
+  gap: 3px;
+  padding: var(--s-2) var(--s-3) 0;
+  border-left: 1px solid var(--line);
+}
+
+.hudCell:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.hudCell dt {
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.hudCell dd {
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* fixed measures so the strip never jitters as numbers change */
+.hudLoss dd {
+  min-width: 6ch;
+}
+
+.hudOpt dd {
+  min-width: 31ch;
+}
+
+.hudCell[data-state="target"] dd,
+.hudCell[data-state="shaping"] dd {
+  color: var(--fix-hi);
+}
+
+.deva {
+  font-family: var(--font-deva);
+  letter-spacing: 0;
+}
+
+/* ── annotations riding on the terrain ── */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.targetMark,
+.spot,
+.reticle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+
+.targetMark {
+  visibility: hidden;
+}
+
+.targetMark > * {
+  position: absolute;
+}
+
+.targetRing {
+  left: -9px;
+  top: -9px;
+}
+
+.targetRing circle {
+  fill: none;
+  stroke: var(--hydro);
+  stroke-width: 1.25;
+}
+
+.targetRing .targetDot {
+  fill: var(--hydro);
+  stroke: none;
+}
+
+.lake {
+  left: 14px;
+  transition: opacity var(--dur-2) var(--ease);
+  top: -0.85em;
+  font-family: var(--font-deva);
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--hydro);
+  white-space: nowrap;
+}
+
+.targetMark[data-locked] .lake {
+  opacity: 0;
+}
+
+.spot {
+  visibility: hidden;
+}
+
+.spotDot {
+  position: absolute;
+  left: -2.5px;
+  top: -2.5px;
+  width: 5px;
+  height: 5px;
+  border: 1px solid var(--z7);
+  border-radius: 50%;
+}
+
+.spotValue {
+  position: absolute;
+  left: 7px;
+  top: -0.7em;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--mute);
+  white-space: nowrap;
+}
+
+.reticle {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.brackets {
+  position: absolute;
+  left: -32px;
+  top: -32px;
+  width: 64px;
+  height: 64px;
+}
+
+.brackets path {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.5;
+  stroke-linecap: square;
+}
+
+.brackets .reticleCross {
+  stroke-width: 1;
+}
+
+.chip {
+  position: absolute;
+  left: 46px;
+  top: -13px;
+  padding: 5px 10px 5px 9px;
+  border: 1px solid var(--fix);
+  border-radius: var(--r-1);
+  background: var(--ground);
+  box-shadow: var(--shadow-1);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--fix-hi);
+  white-space: nowrap;
+}
+
+/* ── static map (plain / reduced motion / no WebGL) ── */
+
+.mapMinor path {
+  stroke: var(--contour);
+  stroke-width: 1;
+}
+
+.mapIndex path {
+  stroke: var(--contour-index);
+  stroke-width: 1.6;
+}
+
+.mapLabels text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  fill: var(--mute);
+  stroke: var(--ground);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.mapLop {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.6;
+  opacity: 0;
+  transition: opacity var(--dur-2) var(--ease);
+}
+
+.mapTrack {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.6;
+  stroke-dasharray: 5 4;
+  stroke-linecap: round;
+  opacity: 0;
+}
+
+.mapMarble {
+  fill: var(--fix);
+  stroke: var(--fix-ink);
+  stroke-width: 1.5;
+  opacity: 0;
+}
+
+.mapFix {
+  opacity: 0;
+  transition: opacity var(--dur-2) var(--ease);
+}
+
+.mapFix ellipse,
+.mapFix path {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.25;
+}
+
+.mapFix .mapFixDot {
+  fill: var(--fix);
+  stroke: none;
+}
+
+.mapRipple {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1.5;
+  opacity: 0;
+}
+
+/* ── squarer screens (tablets, small laptops): a narrower column keeps the basin clear ── */
+
+@media (min-width: 721px) and (max-width: 1100px) {
+  .content {
+    grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
+    column-gap: var(--s-5);
+  }
+}
+
+/* ── narrow sheets ── */
+
+@media (max-width: 720px) {
+  /* a phone sheet stacks: name, roles, offer and the actions in the first screen, then a band
+     of open terrain with its note, then the terminal just below the fold */
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 100svh;
+    padding-top: calc(56px + clamp(14px, 3vh, 32px));
+    padding-bottom: var(--s-6);
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+  }
+
+  .name {
+    font-size: min(3.25rem, calc((100vw - 2 * var(--gutter)) / 8.7));
+    line-height: 1;
+  }
+
+  .nameLine {
+    flex-direction: column;
+    row-gap: 0.12em;
+  }
+
+  .coords {
+    position: static;
+    flex-wrap: wrap;
+    gap: 2px var(--s-4);
+    margin-top: var(--s-2);
+  }
+
+  .lead {
+    margin-top: var(--s-5);
+  }
+
+  .offer {
+    margin-top: var(--s-3);
+    font-size: 1.0625rem;
+    line-height: 1.4;
+  }
+
+  .status {
+    margin-top: var(--s-3);
+    padding: 6px 12px 6px 10px;
+    border-radius: var(--r-3);
+    font-size: 0.78125rem;
+    font-stretch: 84%;
+  }
+
+  .ctas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-2);
+    width: 100%;
+    margin-top: var(--s-4);
+  }
+
+  .ctas > :first-child {
+    grid-column: 1 / -1;
+  }
+
+  .ctas > span > a,
+  .ctas > span > button {
+    --h: 48px;
+    width: 100%;
+    justify-content: center;
+    padding-inline: var(--s-3);
+    font-size: 0.9375rem;
+  }
+
+  .ctas > :first-child > a {
+    --h: 52px;
+    font-size: 1.0625rem;
+  }
+
+  /* the two side by side: labels alone, icons would crowd them */
+  .ctas > span:not(:first-child) > * > span + span {
+    display: none;
+  }
+
+  .ctas .projects {
+    height: var(--h);
+    border: 1px solid var(--line-strong);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  /* open terrain for the basin; the note sits at its floor and points up into it */
+  .field {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto auto;
+    flex: 1 0 auto;
+    min-height: clamp(230px, 36svh, 330px);
+    margin-top: var(--s-3);
+  }
+
+  .note {
+    position: relative;
+    grid-row: 2;
+    left: auto;
+    top: auto;
+    justify-self: start;
+    max-width: 13rem;
+    transform: rotate(-2deg);
+  }
+
+  .noteLead {
+    font-size: 1.1875rem;
+    white-space: normal;
+  }
+
+  .noteSub {
+    font-size: 0.96875rem;
+  }
+
+  .noteArrow {
+    left: calc(100% - 6px);
+    top: -66px;
+    width: 62px;
+    height: 66px;
+    transform: rotate(180deg);
+  }
+
+  .dock {
+    grid-column: 1;
+    grid-row: 3;
+    justify-self: stretch;
+    margin-top: var(--s-4);
+  }
+
+  .dockInner {
+    justify-items: stretch;
+  }
+
+  /* no hover on a phone: the marble's story is the whole readout */
+  .hudGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .hudLoss {
+    display: none !important;
+  }
+
+  .hudOpt {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .hudOpt dd {
+    min-width: 0;
+  }
+
+  .termSlot {
+    width: 100%;
+    margin-top: var(--s-5);
+  }
+
+  .chip {
+    left: 50%;
+    top: 40px;
+    transform: translateX(-50%);
+  }
+}
+
+/* short phones: tighten the rhythm so the actions stay in the first screen */
+@media (max-width: 720px) and (max-height: 740px) {
+  .content {
+    padding-top: calc(56px + 10px);
+  }
+
+  .name {
+    font-size: min(2.75rem, calc((100vw - 2 * var(--gutter)) / 9.4));
+  }
+
+  .lead {
+    margin-top: var(--s-4);
+  }
+
+  .offer {
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statusDot::after {
+    animation: none;
+    opacity: 0;
+  }
+}

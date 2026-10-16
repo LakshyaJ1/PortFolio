@@ -1,0 +1,283 @@
+/* The field pass: a stage the lanyard hangs in, a turn-over control, and a margin note. */
+
+.pass {
+  /* total stage height (including the reach above) that shows the card at full size with the button just below it */
+  --stage-total: 880px;
+  --bleed: var(--gutter);
+  position: relative;
+  display: grid;
+  grid-template-rows: max(560px, calc(var(--stage-total) - var(--reach, 0px))) auto;
+}
+
+.slot {
+  position: relative;
+  min-width: 0;
+}
+
+/* Wide: reaches up to the sheet edge rule (--reach is measured) and out into the margins. */
+.stage {
+  position: absolute;
+  top: calc(-1 * var(--reach, 0px));
+  bottom: 0;
+  left: calc(-1 * var(--bleed));
+  right: calc(-1 * var(--bleed));
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* the survey nail the strap is pinned to */
+.nail {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 2;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border: 2px solid var(--z8);
+  border-radius: 50%;
+  background: var(--z1);
+  box-shadow: var(--shadow-1);
+  pointer-events: none;
+}
+
+/* only drawn on narrow layouts, where the pass hangs from its own ruled edge */
+.rule {
+  display: none;
+}
+
+/* ─── margin note ─── */
+.note {
+  position: absolute;
+  left: max(4%, calc(50% - 300px));
+  top: 47%;
+  z-index: 2;
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  color: var(--ink-3);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-3) var(--ease);
+}
+
+.note[data-show] {
+  opacity: 1;
+}
+
+.noteText {
+  display: block;
+  font-family: var(--font-kalam), cursive;
+  font-size: 1.375rem;
+  line-height: 1.1;
+  transform: rotate(-6deg);
+  transform-origin: left center;
+  white-space: nowrap;
+}
+
+.arrow {
+  width: 104px;
+  height: auto;
+  margin-left: 34px;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  overflow: visible;
+}
+
+/* ─── turn-over control ─── */
+.controls {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding-top: var(--s-2);
+}
+
+.turn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 36px;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  font-family: var(--font-display);
+  font-size: var(--t-small);
+  font-weight: 600;
+  font-stretch: 88%;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  background: var(--ground);
+  transition:
+    color var(--dur-2) var(--ease),
+    border-color var(--dur-2) var(--ease);
+}
+
+.turn:hover,
+.turn:focus-visible {
+  color: var(--ink);
+  border-color: var(--fix);
+}
+
+.turn svg {
+  transition: transform var(--dur-3) var(--ease);
+}
+
+.turn:hover svg {
+  transform: rotate(-180deg);
+}
+
+/* ─── static pass (no WebGL, reduced motion, plain sheet) ─── */
+.hang {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: var(--s-5);
+}
+
+.strap {
+  flex: 0 0 auto;
+  display: block;
+  width: 34px;
+  height: clamp(110px, 38%, 340px);
+  overflow: hidden;
+  background: var(--fix);
+  box-shadow: inset 0 3px 0 rgb(0 0 0 / 0.18), inset 0 -3px 0 rgb(0 0 0 / 0.18);
+}
+
+.strapText {
+  display: block;
+  height: 100%;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 750;
+  font-stretch: 112%;
+  line-height: 34px;
+  letter-spacing: 0.16em;
+  text-align: center;
+  color: var(--fix-ink);
+}
+
+.hardware {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 46px;
+  margin-top: -2px;
+  fill: none;
+  stroke: var(--z8);
+  stroke-width: 2.5;
+}
+
+.hardware rect:last-child {
+  fill: var(--z7);
+  stroke: var(--z8);
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: clamp(200px, 56%, 286px);
+  aspect-ratio: 1024 / 1440;
+  margin-top: -8px;
+  perspective: 1400px;
+  border-radius: var(--r-3);
+  transform: rotate(-1.5deg);
+  transform-origin: 50% 0;
+  transition: transform var(--dur-3) var(--ease);
+}
+
+.card:hover {
+  transform: rotate(0deg) translateY(-2px);
+}
+
+.card:focus-visible {
+  border-radius: var(--r-3);
+}
+
+.cardInner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform var(--dur-4) var(--ease);
+}
+
+.card[data-face="back"] .cardInner {
+  transform: rotateY(180deg);
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--r-3);
+  background: var(--z10);
+  box-shadow: var(--shadow-2);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  opacity: 0;
+  transition: opacity var(--dur-3) var(--ease);
+}
+
+.card[data-drawn] .face {
+  opacity: 1;
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+/* ─── narrow: the pass gets its own ruled edge to hang from ─── */
+@media (max-width: 1023px) {
+  .pass {
+    --stage-total: 600px;
+    --bleed: 0px;
+    max-width: 560px;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .rule {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    height: 9px;
+    margin-top: -4.5px;
+    background:
+      linear-gradient(var(--line-strong), var(--line-strong)) left center / 100% 1px no-repeat,
+      repeating-linear-gradient(90deg, var(--z5) 0 1px, transparent 1px 40px) left center / 100% 5px no-repeat;
+  }
+
+  .note {
+    left: 2%;
+    top: 14%;
+  }
+
+  .noteText {
+    font-size: 1.1875rem;
+  }
+
+  .arrow {
+    width: 76px;
+    margin-left: 28px;
+  }
+}
+
+@media (max-width: 420px) {
+  .note {
+    top: 11%;
+    left: 0;
+  }
+}

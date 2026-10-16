@@ -1,0 +1,283 @@
+/* B2 · Field notes */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  grid-template-areas:
+    "statement pass"
+    "facts pass";
+  grid-template-rows: auto 1fr;
+  column-gap: var(--s-8);
+  row-gap: var(--s-6);
+  align-items: start;
+}
+
+.statementCell {
+  grid-area: statement;
+  min-width: 0;
+}
+
+.passCell {
+  grid-area: pass;
+  align-self: start;
+  min-width: 0;
+}
+
+.factsCell {
+  grid-area: facts;
+  min-width: 0;
+}
+
+/* ─── statement ─── */
+.statement {
+  max-width: 31ch;
+  font-size: clamp(1.4375rem, 0.95rem + 1.55vw, 2.375rem);
+  font-weight: 450;
+  font-stretch: 100%;
+  line-height: 1.24;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  text-wrap: pretty;
+  font-variant-numeric: tabular-nums;
+}
+
+.word {
+  will-change: color;
+}
+
+/* ─── quick facts: three ruled rows that read as sentences, then the ways to reach him ─── */
+.factsBlock {
+  display: grid;
+  gap: var(--s-4);
+  max-width: 44rem;
+}
+
+.facts {
+  display: grid;
+  margin: 0;
+}
+
+.fact {
+  position: relative;
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: var(--s-4);
+  padding-block: var(--s-3);
+  border-top: 1px solid var(--line);
+}
+
+.fact:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+/* a survey tick where each rule starts */
+.fact::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -4px;
+  width: 1px;
+  height: 8px;
+  background: var(--z6);
+}
+
+.fact dt {
+  font-size: var(--t-small);
+  font-weight: 650;
+  font-stretch: 82%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.fact dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-4);
+  margin: 0;
+  min-width: 0;
+}
+
+.value {
+  font-size: clamp(1.25rem, 1.02rem + 0.62vw, 1.625rem);
+  font-weight: 560;
+  font-stretch: 100%;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.value abbr {
+  text-decoration: none;
+}
+
+.coord {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.aside {
+  font-size: var(--t-body);
+  color: var(--ink-3);
+}
+
+/* the CGPA, printed like the field pass: dark ink on paper */
+.score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  padding: 3px var(--s-3) 4px;
+  border-radius: var(--r-1);
+  background: var(--ink);
+  color: var(--ground);
+}
+
+.scoreLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-stretch: 82%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.scoreFigure {
+  font-size: clamp(1.375rem, 1.15rem + 0.6vw, 1.75rem);
+  font-weight: 750;
+  font-stretch: 100%;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── reach him: email (+ copy) and the résumé ─── */
+.reach {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.mailGroup {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  min-width: 0;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 var(--s-4) 0 var(--s-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  font-size: var(--t-lead);
+  font-weight: 560;
+  line-height: 1.15;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color var(--dur-2) var(--ease);
+}
+
+.action svg {
+  flex: none;
+  color: var(--ink-3);
+  transition: color var(--dur-2) var(--ease);
+}
+
+.action:hover,
+.action:focus-visible {
+  border-color: var(--fix);
+}
+
+.action:hover svg,
+.action:focus-visible svg {
+  color: var(--fix-hi);
+}
+
+.address {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* a non-measurement tag: Archivo condensed, never mono */
+.fileTag {
+  font-size: 0.75rem;
+  font-weight: 650;
+  font-stretch: 80%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 var(--s-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 650;
+  font-stretch: 82%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  transition:
+    color var(--dur-2) var(--ease),
+    border-color var(--dur-2) var(--ease);
+}
+
+.chip:hover,
+.chip:focus-visible {
+  color: var(--ink);
+  border-color: var(--fix);
+}
+
+.chip[data-state="copied"] {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+
+.chip[data-state="failed"] {
+  color: var(--alert);
+  border-color: var(--alert);
+}
+
+/* ─── narrow: statement, the facts, then the pass to play with ─── */
+@media (max-width: 1023px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "statement"
+      "facts"
+      "pass";
+    grid-template-rows: auto;
+    row-gap: var(--s-6);
+  }
+
+  .statement {
+    max-width: 34ch;
+  }
+}
+
+@media (max-width: 520px) {
+  .fact {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2px;
+  }
+
+  .action {
+    font-size: var(--t-body);
+  }
+}

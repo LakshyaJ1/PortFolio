@@ -1,0 +1,17 @@
+# Uploaded to Vercel: only what `next build` needs. Raw inputs, personal documents and QA output stay local.
+/assets-inbox
+/.qa
+/.impeccable
+/.playwright-cli
+/.next
+/node_modules
+/scripts
+/avatar
+*.log
+/LakshyaCV (2).pdf
+/Make-Your-Own-Mascot.pdf
+/TALKING-VIDEO PORTFOLIO.docx
+/tsconfig.tsbuildinfo
+# never upload local secrets; set them in Vercel → Settings → Environment Variables
+.env*
+!.env.example

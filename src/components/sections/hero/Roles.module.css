@@ -1,0 +1,186 @@
+/* The roles line under the range name: a width-axis morph between what he can be hired as. */
+
+.roles {
+  position: relative;
+  width: 100%;
+  pointer-events: auto;
+}
+
+/* ── the rotor ── */
+
+.rotor {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+}
+
+.line {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  font-size: clamp(1.75rem, 1.1rem + 2vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+
+.word {
+  --m: 1;
+  grid-area: 1 / 1;
+  justify-self: start;
+  white-space: nowrap;
+  /* the role's fitted width (100% unless it would overflow), times the morph */
+  font-stretch: calc(var(--fit, 100) * var(--m) * 1%);
+  opacity: 0;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.word:first-child {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* measures a role at its natural width */
+.probe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-stretch: 100%;
+  white-space: nowrap;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ticks {
+  display: flex;
+  gap: 6px;
+}
+
+.tick {
+  position: relative;
+  width: 26px;
+  height: 2px;
+  overflow: hidden;
+  background: var(--line-strong);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  background: var(--fix);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* ── the plain list: screen readers always; eyes under reduced motion and the plain sheet ── */
+
+.list {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+  list-style: none;
+}
+
+.roles[data-still] .rotor {
+  display: none;
+}
+
+.roles[data-still] .list {
+  position: static;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 4px;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  font-size: var(--t-h3);
+  font-weight: 600;
+  font-stretch: 96%;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.item {
+  white-space: nowrap;
+}
+
+/* a survey-orange dot between roles (drawn, so it is never read aloud) */
+.roles[data-still] .item + .item::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin: 0 0.55em;
+  border-radius: 50%;
+  background: var(--fix);
+  vertical-align: 0.2em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotor {
+    display: none;
+  }
+
+  .list {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 4px;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    font-size: var(--t-h3);
+    font-weight: 600;
+    font-stretch: 96%;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  .item + .item::before {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin: 0 0.55em;
+    border-radius: 50%;
+    background: var(--fix);
+    vertical-align: 0.2em;
+  }
+}
+
+@media (max-width: 720px) {
+  .rotor {
+    gap: 8px;
+  }
+
+  .line {
+    font-size: clamp(1.5rem, 0.9rem + 3vw, 1.875rem);
+  }
+
+  .roles[data-still] .list {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 720px) and (prefers-reduced-motion: reduce) {
+  .list {
+    font-size: 1.125rem;
+  }
+}
