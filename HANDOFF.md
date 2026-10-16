@@ -2,7 +2,13 @@
 
 _Last updated: 2026-10-16. Read this first when resuming (human or Claude)._
 
-## Latest: revamp round (2026-10-17)
+## Latest: follow-ups (2026-10-17, later)
+
+- **"What he ships" is back to the pinned band.** The words scroll through the orange line-of-position band and the instrument wipes in, as Lakshya preferred over the simple list. Each row now also shows a glyph, the org, the year or NOW, and a bold key figure, printed in ink inside the band. The simple version is backed up in the session scratchpad only, so it can be dropped.
+- **Sound is on by default** (`useApp.sound` defaults to `true` and is remembered per visitor). If the browser blocks autoplay with sound, the stage keeps the setting on and shows "Tap anywhere to hear him". The first tap or key anywhere restores the voice. "Voice off" is the explicit off switch.
+- **"Meet Lakshya"** (`hero/MeetLakshya.tsx`) replaces the small "Hear him say hi" link: his portrait in a pulsing ring with a play badge, which replays the 20 s intro with sound. Anchor `hero-intro`; Bindu points it out as step 2 of her tour.
+
+## Revamp round (2026-10-17)
 
 Lakshya's review was turned into one big pass by 9 parallel agents. The brief and contracts are in `docs/REVAMP.md` and `docs/GUIDE.md` (Bindu's `data-guide` anchors).
 
@@ -31,7 +37,8 @@ QA tools for later rounds, all serialized for this low-RAM machine:
 - Vercel account: `lakshyaj1`. Project: `lakshya-jain`. The folder is linked via `.vercel/` (git-ignored).
 - `GEMINI_API_KEY` is set in Vercel as a sensitive variable for production and preview. Bindu reports online with `gemini-3.5-flash-lite`.
 - `vercel.json` pins the framework to Next.js. The canonical URL comes from `VERCEL_PROJECT_PRODUCTION_URL` (see `src/lib/site.ts`) unless `NEXT_PUBLIC_SITE_URL` is set.
-- To redeploy after changes, run `npx vercel@62.2.0 deploy --prod` from the project folder. It's not a git repo yet, so deploys are manual; connecting a GitHub repo gives automatic deploys.
+- **Source: https://github.com/LakshyaJ1/PortFolio (public, branch `main`)**, connected to the Vercel project. Every push to `main` deploys to production automatically. A manual deploy is still possible: `npx vercel@62.2.0 deploy --prod`.
+- Before pushing, run `npx tsc --noEmit`, `npx eslint src` and `npx next build`. Never commit `.env*` (ignored); secrets live in Vercel's env settings.
 - `lakshya-jain.vercel.app` belongs to someone else. A custom domain can be added in Vercel → Project → Domains.
 - The live visitor walk passed: 0 errors, 0 failed requests, 0 overflow, all anchors present.
 
