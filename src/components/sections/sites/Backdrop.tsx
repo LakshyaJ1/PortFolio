@@ -146,7 +146,12 @@ function paint(box: Box, p: number, t: number) {
   layer(NEAR, p * NEAR_TRAVEL + drift, 2.3, near, (n) => (n % 3 === 1 ? pal.z[5] : pal.z[4]));
 }
 
-export function Backdrop({ progress, still }: { progress: RefObject<number>; still: boolean }) {
+/**
+ * `live`: the pinned row redraws it as the row moves and lets it drift. Off (phones), it is painted
+ * once per size change: re-running marching squares over a section-tall canvas on every swipe frame
+ * was the main cost of scrolling the row on a phone.
+ */
+export function Backdrop({ progress, still, live = true }: { progress: RefObject<number>; still: boolean; live?: boolean }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const box = useRef<Box>({ ctx: null, w: 0, h: 0 });
   const clock = useRef({ t: 0, drawnAt: -1, drawnP: -1 });
@@ -175,7 +180,7 @@ export function Backdrop({ progress, still }: { progress: RefObject<number>; sti
     return () => ro.disconnect();
   }, [progress, still]);
 
-  useLoop(canvas, true, (dt) => {
+  useLoop(canvas, live, (dt) => {
     const c = clock.current;
     c.t += dt;
     const p = progress.current;

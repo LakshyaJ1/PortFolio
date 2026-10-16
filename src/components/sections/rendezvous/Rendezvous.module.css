@@ -473,3 +473,16 @@
     padding-left: 0;
   }
 }
+
+/* Lenis's stylesheet gives [data-lenis-prevent] overscroll-behavior: contain. On touch that traps a
+   finger drag inside the calendar (the page can't be scrolled past it on a phone), so touch screens
+   chain normally; trackpads and mice keep the wheel inside the calendar. */
+.panel .stage[data-lenis-prevent] {
+  overscroll-behavior: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .panel .stage[data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+}

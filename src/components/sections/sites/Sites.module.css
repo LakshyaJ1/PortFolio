@@ -169,8 +169,22 @@
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scroll-padding-inline: var(--pad);
-  overscroll-behavior-x: contain;
   scrollbar-width: none;
+}
+
+/* Lenis's stylesheet gives every [data-lenis-prevent-horizontal] element overscroll-behavior: contain
+   on both axes. On touch that stops a vertical finger drag that starts on the row from scrolling
+   the page: the section felt stuck on phones and an opened sheet couldn't be scrolled. So: normal
+   chaining everywhere (this selector outranks Lenis's), and only trackpads keep a sideways
+   containment, so a sideways overscroll doesn't trigger the browser's back gesture. */
+.stage .viewport[data-lenis-prevent-horizontal] {
+  overscroll-behavior: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .stage .viewport[data-lenis-prevent-horizontal] {
+    overscroll-behavior-x: contain;
+  }
 }
 
 .viewport::-webkit-scrollbar {

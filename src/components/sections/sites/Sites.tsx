@@ -105,6 +105,8 @@ export function Sites() {
   /** each card's resting point, as row progress 0…1 */
   const stops = useRef<number[]>(CARDS.map((_, i) => i / (N - 1)));
   const progress = useRef(0);
+  /** the cards currently carry a --d parallax offset */
+  const parallax = useRef(false);
   const activeRef = useRef(0);
   const [active, setActive] = useState(0);
 
@@ -123,14 +125,21 @@ export function Sites() {
         activeRef.current = best;
         setActive(best);
       }
-      // reduced motion and the plain sheet keep the drawings still
-      const k = still ? 0 : 1;
+      // The drawings lag their cards only on the pinned row. On phones, setting --d every frame
+      // restyles each card's whole SVG drawing (custom properties inherit), which made swipes jank.
+      // Reduced motion and the plain sheet keep them still too.
+      if (still || !pinned) {
+        if (parallax.current) slides().forEach((el) => el.style.removeProperty("--d"));
+        parallax.current = false;
+        return;
+      }
+      parallax.current = true;
       slides().forEach((el, i) => {
-        const d = k * Math.max(-1.2, Math.min(1.2, (stops.current[i] - p) * (N - 1)));
+        const d = Math.max(-1.2, Math.min(1.2, (stops.current[i] - p) * (N - 1)));
         el.style.setProperty("--d", d.toFixed(3));
       });
     },
-    [slides, still],
+    [slides, still, pinned],
   );
 
   /** distance (px) from the first card to the last, and each card's stop along it */
@@ -302,7 +311,7 @@ export function Sites() {
           aria-label="Projects"
           onKeyDown={onKeyDown}
         >
-          {plain ? null : <Backdrop progress={progress} still={still} />}
+          {plain ? null : <Backdrop progress={progress} still={still} live={pinned} />}
 
           <div className={styles.bar}>
             <p className={styles.count}>

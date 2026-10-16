@@ -77,6 +77,9 @@ function Guide() {
   const narrow = useIsNarrow();
   const fine = useFinePointer();
   const still = reduce || plain;
+  // Touch screens: her figure holds poses instead of running the renderer's idle loop. It rewrote
+  // the SVG every frame, which competed with scrolling on phones. She still flies and talks.
+  const posed = still || !fine;
   const size = narrow ? 52 : 72;
   const inIntro = phase === "intro";
 
@@ -682,7 +685,9 @@ function Guide() {
     const onScroll = () => {
       if (active || !placed) return;
       const now = performance.now();
-      if (now - lastCheck > 220) {
+      // phones skip the mid-scroll check: it measures every candidate on the page, which is costly on
+      // a phone; she re-settles once the scroll ends (below)
+      if (!narrowRef.current && now - lastCheck > 220) {
         lastCheck = now;
         const p = mover.get();
         const s = sizeRef.current;
@@ -804,9 +809,9 @@ function Guide() {
   /* ───────── waking → idle ───────── */
   useEffect(() => {
     if (!waking) return;
-    const t = window.setTimeout(() => setWaking(false), still ? 500 : 2600); // fallback if onAnimationEnd never fires
+    const t = window.setTimeout(() => setWaking(false), posed ? 500 : 2600); // fallback if onAnimationEnd never fires
     return () => window.clearTimeout(t);
-  }, [waking, still]);
+  }, [waking, posed]);
   const onAnimationEnd = useCallback((a: string) => {
     if (a === "waking") setWaking(false);
   }, []);
@@ -963,7 +968,7 @@ function Guide() {
               <span className={styles.shadow} aria-hidden="true" />
               <span className={styles.body} data-face={face}>
                 <span className={styles.bob}>
-                  <MascotFigure mood={mood} size={size} still={still} onAnimationEnd={onAnimationEnd} />
+                  <MascotFigure mood={mood} size={size} still={posed} onAnimationEnd={onAnimationEnd} />
                 </span>
               </span>
             </button>
