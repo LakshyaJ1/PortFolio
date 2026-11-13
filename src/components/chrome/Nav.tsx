@@ -117,8 +117,8 @@ export function Nav() {
             <Icon name="menu" size={16} className={styles.menuIcon} />
             <span className={styles.word}>Menu</span>
           </button>
-          <a className={styles.resume} href={PROFILE.resumePath} download="Lakshya-Jain-Resume.pdf">
-            <Icon name="download" size={16} />
+          <a className={styles.resume} href={PROFILE.resumePath} target="_blank" rel="noopener noreferrer">
+            <Icon name="arrow-ne" size={16} />
             Résumé
           </a>
           <Button

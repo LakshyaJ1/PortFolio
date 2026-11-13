@@ -35,7 +35,7 @@ export const lineMs = (text: string) => Math.min(8000, Math.max(3800, 2400 + tex
 
 export function introSteps(enterText: () => string): Step[] {
   return [
-    { id: "intro:resume", kind: "intro", anchor: "intro-resume", text: "You can download his résumé right here.", label: "Bindu", ttl: 2800, mood: "excited" },
+    { id: "intro:resume", kind: "intro", anchor: "intro-resume", text: "You can view or download his résumé right here.", label: "Bindu", ttl: 2800, mood: "excited" },
     // stays up through the countdown (the director re-reads the text every second)
     { id: "intro:enter", kind: "intro", anchor: "intro-enter", text: enterText, label: "Bindu", ttl: 20_000, mood: "happy" },
   ];

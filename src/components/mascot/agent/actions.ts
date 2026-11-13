@@ -33,7 +33,7 @@ const SETU_URL = PROJECTS.find((p) => p.id === "setu")?.links[0]?.href ?? PROFIL
 export const LINKS: Record<LinkName, { label: string; href: string }> = {
   github: { label: "GitHub", href: PROFILE.github },
   linkedin: { label: "LinkedIn", href: PROFILE.linkedin },
-  resume: { label: "Résumé (PDF)", href: PROFILE.resumePath },
+  resume: { label: "View / download résumé", href: PROFILE.resumePath },
   setu: { label: "SETU site", href: SETU_URL },
   calendar: { label: "Booking page", href: PROFILE.calUrl },
 };

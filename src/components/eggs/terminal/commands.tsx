@@ -120,7 +120,7 @@ const setu = PROJECTS.find((p) => p.id === "setu");
 const OPEN: Record<string, { label: string; href: string }> = {
   github: { label: bare(PROFILE.github), href: PROFILE.github },
   linkedin: { label: bare(PROFILE.linkedin), href: PROFILE.linkedin },
-  resume: { label: PROFILE.resumePath.slice(1), href: PROFILE.resumePath },
+  resume: { label: "résumé on Google Drive", href: PROFILE.resumePath },
   cal: { label: bare(PROFILE.calUrl), href: PROFILE.calUrl },
   ...(setu?.links[0] ? { setu: { label: bare(setu.links[0].href), href: setu.links[0].href } } : {}),
 };
@@ -290,7 +290,7 @@ function catTopic(topic: Topic): ReactNode {
             ]}
           />
           <p>
-            The full PDF: <Run cmd="open resume" /> or <Ext href={PROFILE.resumePath}>download it</Ext>.
+            The full PDF: <Run cmd="open resume" /> or <Ext href={PROFILE.resumePath}>view / download it on Google Drive</Ext>.
           </p>
         </>
       );

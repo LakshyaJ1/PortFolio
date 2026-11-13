@@ -93,10 +93,9 @@ export function Contact() {
           </a>
         </li>
         <li>
-          <a className={styles.linkBtn} href={PROFILE.resumePath} download>
-            <Icon name="download" size={18} />
-            Résumé
-            <span className={styles.linkMeta}>PDF</span>
+          <a className={styles.linkBtn} href={PROFILE.resumePath} target="_blank" rel="noopener noreferrer">
+            <Icon name="arrow-ne" size={18} />
+            View / download résumé
           </a>
         </li>
         {PROFILE.phone ? (

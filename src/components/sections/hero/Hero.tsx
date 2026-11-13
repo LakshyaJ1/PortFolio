@@ -485,8 +485,8 @@ export function Hero() {
               <HeroBook />
             </span>
             <span data-cta>
-              <Button variant="line" size="lg" icon="download" cta="resume" href={PROFILE.resumePath} download>
-                Download résumé
+              <Button variant="line" size="lg" icon="arrow-ne" cta="resume" href={PROFILE.resumePath}>
+                View / download résumé
               </Button>
             </span>
             <span data-cta>

@@ -22,7 +22,7 @@ export const PROFILE = {
   linkedin: "https://www.linkedin.com/in/lakshya-jain-86b091292/",
   cal: "lakshyajain/30min",
   calUrl: "https://cal.com/lakshyajain/30min",
-  resumePath: "/Lakshya-Jain-Resume.pdf",
+  resumePath: "https://drive.google.com/file/d/1VGU45F99hyAjmjPXG5TCoshHiK75JP8M/view?usp=sharing",
   summary:
     "AI engineer building production agentic systems — human-in-the-loop LLM platforms, RAG pipelines and on-device models — with a background in robotics and extended reality.",
   status: "AI Engineer Intern at Hive Pro · B.Tech CSE (AI/ML), MAIT ’27",

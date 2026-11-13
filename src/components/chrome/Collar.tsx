@@ -50,8 +50,8 @@ export function Collar() {
             <Button variant="fix" size="lg" cta="book-footer" icon="calendar" href="#rendezvous" onClick={travel("rendezvous")}>
               Book a call
             </Button>
-            <Button variant="line" size="lg" icon="download" href={PROFILE.resumePath} download="Lakshya-Jain-Resume.pdf">
-              Résumé
+            <Button variant="line" size="lg" icon="arrow-ne" href={PROFILE.resumePath}>
+              View / download résumé
             </Button>
           </div>
           <div className={styles.north}>

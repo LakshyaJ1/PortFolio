@@ -42,7 +42,6 @@ export { replayIntro } from "./replay";
 gsap.registerPlugin(useGSAP, ScrambleTextPlugin);
 
 const HOME_DMS = formatDMS(PROFILE.home);
-const RESUME_FILE = "Lakshya-Jain-Resume.pdf";
 const BARS = 5;
 /** circumference of the Enter button's countdown ring (r = 19 in a 44 box) */
 const RING = 2 * Math.PI * 19;
@@ -1158,16 +1157,17 @@ export function Intro() {
             data-guide="intro-resume"
             className={styles.resume}
             href={PROFILE.resumePath}
-            download={RESUME_FILE}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={onResume}
             {...optionProps}
           >
             <span className={styles.resumeIcon}>
-              <Icon name={saved ? "check" : "download"} size={22} />
+              <Icon name={saved ? "check" : "arrow-ne"} size={22} />
             </span>
             <span className={styles.resumeText}>
-              <strong>Download résumé</strong>
-              <small>{saved ? "Saved · check your downloads" : "PDF · 2 pages"}</small>
+              <strong>View / download résumé</strong>
+              <small>{saved ? "Opened in a new tab" : "Opens in Google Drive"}</small>
             </span>
           </a>
 

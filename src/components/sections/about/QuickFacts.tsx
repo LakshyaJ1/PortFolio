@@ -108,10 +108,9 @@ export function QuickFacts() {
             {state === "copied" ? "Email address copied" : state === "failed" ? "Couldn't copy. Select the address instead." : ""}
           </span>
         </span>
-        <a className={styles.action} href={PROFILE.resumePath} download="Lakshya-Jain-Resume.pdf">
-          <Icon name="download" size={18} />
-          <span>Résumé</span>
-          <span className={styles.fileTag}>PDF</span>
+        <a className={styles.action} href={PROFILE.resumePath} target="_blank" rel="noopener noreferrer">
+          <Icon name="arrow-ne" size={18} />
+          <span>View / download résumé</span>
         </a>
       </div>
     </div>

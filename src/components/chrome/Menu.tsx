@@ -186,9 +186,9 @@ function Panel({ open, onClose, returnFocus, onGone }: Props & { onGone: () => v
         </ol>
 
         <div className={styles.foot}>
-          <a className={styles.footLink} href={PROFILE.resumePath} download="Lakshya-Jain-Resume.pdf">
-            <Icon name="download" size={16} />
-            Résumé <span className={styles.dim}>PDF</span>
+          <a className={styles.footLink} href={PROFILE.resumePath} target="_blank" rel="noopener noreferrer">
+            <Icon name="arrow-ne" size={16} />
+            View / download résumé
           </a>
           <a className={styles.footLink} href={`mailto:${PROFILE.email}`}>
             <Icon name="mail" size={16} />
