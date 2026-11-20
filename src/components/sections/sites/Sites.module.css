@@ -816,6 +816,11 @@
     --chrome: 172px;
   }
 
+  .site[data-variant="onboard"] .demo {
+    --ratio: 2.08;
+    --chrome: 284px;
+  }
+
   .site[data-variant="pricing"] .demo {
     --ratio: 1.53;
     --chrome: 214px;

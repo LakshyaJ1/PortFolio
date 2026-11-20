@@ -465,3 +465,123 @@
     font-size: 18px;
   }
 }
+
+/* ─── CS Onboarding Agent ─── */
+.plane {
+  fill: var(--z2);
+  fill-opacity: 0.55;
+  stroke: var(--z6);
+  stroke-width: 1;
+  stroke-dasharray: 6 4;
+}
+
+.bus {
+  stroke: var(--z9);
+  stroke-width: 2.4;
+}
+
+.evt {
+  fill: var(--z10);
+}
+
+/* the trigger is a literal event on the ground: survey orange */
+.stamp circle {
+  fill: var(--sheet);
+  stroke: var(--fix);
+  stroke-width: 1.4;
+}
+
+.stamp path {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.meterTrack {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.meterFill {
+  fill: var(--z6);
+}
+
+.meterCap {
+  stroke: var(--fix);
+  stroke-width: 1.6;
+}
+
+.http {
+  stroke: var(--z8);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.db path,
+.db ellipse {
+  fill: var(--z3);
+  stroke: var(--z8);
+  stroke-width: 1;
+}
+
+.gate path {
+  fill: none;
+  stroke: var(--z9);
+  stroke-width: 1.4;
+}
+
+.gate circle {
+  fill: var(--fix);
+}
+
+.queue rect {
+  fill: var(--z2);
+  stroke: var(--z7);
+  stroke-width: 1;
+}
+
+.queue rect:nth-child(3) {
+  fill: var(--z3);
+  stroke: var(--z9);
+}
+
+.queue .check {
+  fill: none;
+  stroke: var(--z10);
+}
+
+.checkMark {
+  fill: none;
+  stroke: var(--z10);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.queueLines {
+  fill: none;
+  stroke: var(--z6);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.svg .queueLines {
+  vector-effect: none;
+}
+
+.mail rect,
+.mail path {
+  fill: none;
+  stroke: var(--z7);
+  stroke-width: 1;
+}
+
+.wall {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 2;
+  stroke-linecap: round;
+}

@@ -45,6 +45,7 @@ const join = (items: string[]) => (items.length < 2 ? items.join("") : `${items.
 
 const PROJECT_TERMS: Record<string, string[]> = {
   setu: ["setu", "gps denied", "gnss", "egomotion", "dead reckoning", "navigation app", "cnn gru", "odometry"],
+  "cs-onboarding": ["onboarding agent", "cs onboarding", "customer onboarding", "onboarding co pilot", "co pilot", "copilot", "closed won", "approval queue", "two plane", "nats", "sow"],
   "amazon-ml": ["amazon", "amazon ml", "pricing", "price prediction", "smape", "ml challenge", "multimodal"],
   tokenforge: ["tokenforge", "token forge", "lakshyacoin", "aptos", "launchpad", "blockchain", "web3", "move contract", "crypto"],
 };

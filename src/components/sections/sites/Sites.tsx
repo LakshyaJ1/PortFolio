@@ -16,9 +16,11 @@ import { SiteSheet, type Report } from "./SiteSheet";
 import { SetuPlan } from "./drawings/SetuPlan";
 import { PricingPlan } from "./drawings/PricingPlan";
 import { TokenPlan } from "./drawings/TokenPlan";
+import { OnboardPlan } from "./drawings/OnboardPlan";
 import { DeadReckoning } from "./demos/DeadReckoning";
 import { FusionSlider } from "./demos/FusionSlider";
 import { LiquidityLock } from "./demos/LiquidityLock";
+import { OnboardingRun } from "./demos/OnboardingRun";
 import styles from "./Sites.module.css";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -28,12 +30,13 @@ const ROW_QUERY = "(min-width: 900px) and (min-height: 640px)";
 
 const byId = (id: string) => PROJECTS.find((p) => p.id === id)!;
 const SETU = byId("setu");
+const ONBOARD = byId("cs-onboarding");
 const PRICING = byId("amazon-ml");
 const TOKEN = byId("tokenforge");
 
 type Card = {
   project: Project;
-  variant: "setu" | "pricing" | "token";
+  variant: "setu" | "onboard" | "pricing" | "token";
   /** what it is, in one plain line (built only from the résumé wording in profile.ts) */
   line: string;
   /** what turning the sheet shows */
@@ -57,6 +60,18 @@ const CARDS: Card[] = [
       approach: SETU.points,
     },
     Demo: DeadReckoning,
+  },
+  {
+    project: ONBOARD,
+    variant: "onboard",
+    line: "Turns a won HubSpot deal into a review-ready onboarding: the e-mail, kickoff proposal, SOW and deck, all waiting for a person to approve.",
+    demo: "Live demo · close a deal",
+    drawing: <OnboardPlan />,
+    report: {
+      problem: "A HubSpot Closed-Won deal has to become a review-ready onboarding, and nothing may reach the customer without human approval.",
+      approach: ONBOARD.points,
+    },
+    Demo: OnboardingRun,
   },
   {
     project: PRICING,

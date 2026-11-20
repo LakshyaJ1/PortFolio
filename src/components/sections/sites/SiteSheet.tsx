@@ -38,7 +38,7 @@ export function SiteSheet({
 }: {
   project: Project;
   no: number;
-  variant: "setu" | "pricing" | "token";
+  variant: "setu" | "onboard" | "pricing" | "token";
   line: string;
   /** what the back holds, printed under "Turn the sheet" */
   demo: string;

@@ -480,3 +480,84 @@
   font-size: var(--t-small);
   color: var(--ink-2);
 }
+
+/* ─── CS Onboarding Agent ─── */
+.ghostBtn {
+  height: 38px;
+  padding-inline: var(--s-4);
+  border: 1px solid var(--z8);
+  border-radius: var(--r-1);
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-stretch: 108%;
+  transition:
+    border-color var(--dur-2) var(--ease),
+    color var(--dur-2) var(--ease),
+    transform var(--dur-2) var(--ease);
+}
+
+.ghostBtn:hover:not(:disabled) {
+  border-color: var(--fix);
+  color: var(--fix-hi);
+}
+
+.ghostBtn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.ghostBtn:disabled {
+  border-color: var(--z5);
+  color: var(--ink-3);
+  cursor: not-allowed;
+}
+
+.bus {
+  stroke: var(--z9);
+  stroke-width: 2.2;
+}
+
+.gateMark {
+  fill: var(--sheet);
+  stroke: var(--fix);
+  stroke-width: 1.4;
+}
+
+.dupToken {
+  fill: var(--fix);
+}
+
+.dupNote {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 600;
+  font-stretch: 82%;
+  fill: var(--fix-hi);
+}
+
+.queueRow {
+  fill: var(--z3);
+  stroke: var(--z6);
+  stroke-width: 1;
+}
+
+.queueState {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 600;
+  font-stretch: 82%;
+  letter-spacing: 0.04em;
+  fill: var(--fix-hi);
+}
+
+.blockX {
+  fill: none;
+  stroke: var(--fix);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.capTick {
+  stroke: var(--fix);
+  stroke-width: 1.6;
+}

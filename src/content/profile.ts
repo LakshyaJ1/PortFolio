@@ -22,7 +22,7 @@ export const PROFILE = {
   linkedin: "https://www.linkedin.com/in/lakshya-jain-86b091292/",
   cal: "lakshyajain/30min",
   calUrl: "https://cal.com/lakshyajain/30min",
-  resumePath: "https://drive.google.com/file/d/1VGU45F99hyAjmjPXG5TCoshHiK75JP8M/view?usp=sharing",
+  resumePath: "https://drive.google.com/file/d/1ZqeeJVX49A7jcXu0QGhQUF6hdzWxL4Sc/view?usp=sharing",
   summary:
     "AI engineer building production agentic systems — human-in-the-loop LLM platforms, RAG pipelines and on-device models — with a background in robotics and extended reality.",
   status: "AI Engineer Intern at Hive Pro · B.Tech CSE (AI/ML), MAIT ’27",
@@ -213,6 +213,26 @@ export const PROJECTS: Project[] = [
       { value: "84,000+", label: "parameters" },
     ],
     links: [{ label: "Website / APK", href: "https://setu-six-jet.vercel.app/" }],
+  },
+  {
+    id: "cs-onboarding",
+    title: "CS Onboarding Agent",
+    subtitle: "AI co-pilot for customer onboarding",
+    category: "Full stack · Agentic AI · AI/ML",
+    stack: ["Python", "LangGraph", "FastAPI", "PostgreSQL", "NATS", "Next.js", "Docker Compose", "Caddy"],
+    points: [
+      "An AI onboarding co-pilot: a HubSpot Closed-Won deal becomes a review-ready onboarding, with a LangGraph agent drafting the e-mail and kickoff proposal, the SOW and deck assembled, and all of it queued for human approval.",
+      "A two-plane, event-driven system (a DB-free agent plane and a PostgreSQL product plane, joined by NATS and read-only HTTP) with idempotent ingest (event IDs, partial unique indexes, queue groups): no duplicate drafts.",
+      "Safety enforced as code: no path can send customer e-mail, invites pass one policy choke point, and the LLM layer adds prompt-injection fencing, money redaction and per-run and per-day spend caps.",
+      "Verified with 4,800+ automated tests and an end-to-end pilot (zero 5xx, US$2.45 AI spend); wrote the Docker Compose / Caddy deployment spec.",
+    ],
+    figures: [
+      { value: "4,800+", label: "automated tests" },
+      { value: "0", label: "5xx errors in the pilot" },
+      { value: "US$2.45", label: "AI spend for the pilot" },
+      { value: "0", label: "duplicate drafts" },
+    ],
+    links: [],
   },
   {
     id: "amazon-ml",

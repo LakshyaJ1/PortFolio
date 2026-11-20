@@ -22,6 +22,7 @@
 ## Projects
 
 - SETU — GPS-denied egomotion tracking on Android: spectral velocity odometry from accelerometer vibrations, a 207 KB on-device CNN-GRU model (1–5 ms inference), 227 Hz sensor pipeline. https://setu-six-jet.vercel.app/
+- CS Onboarding Agent — AI co-pilot for customer onboarding: a HubSpot Closed-Won deal becomes a review-ready onboarding (LangGraph-drafted e-mail and kickoff proposal, assembled SOW and deck) queued for human approval. Two-plane, event-driven design on NATS and PostgreSQL with idempotent ingest; no path can send customer e-mail; 4,800+ automated tests; end-to-end pilot with zero 5xx and US$2.45 AI spend.
 - Product Pricing Prediction (Amazon ML Challenge) — multimodal BERT + ResNet embeddings, XGBoost/LightGBM ensemble, 21.06% SMAPE, top 20% globally.
 - TokenForge — Aptos token launchpad with Move contract generation; launched "Lakshyacoin".
 
